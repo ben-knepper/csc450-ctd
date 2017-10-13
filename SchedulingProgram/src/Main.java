@@ -1,7 +1,7 @@
 public class Main {
 
 	public void main() {
-		
+
 	}
 	
 	public void addEmployeeToEvent(Employee e, Event a){
