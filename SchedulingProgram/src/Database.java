@@ -9,28 +9,6 @@ public final class Database
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 	
-	private ArrayList<Employee> employees;
-	private ArrayList<Venue> venues;
-	private ArrayList<Event> events;
-	
-	public ArrayList<Employee> getEmployees()
-	{
-		return employees;
-	}
-	public ArrayList<Venue> getVenues()
-	{
-		return venues;
-	}
-	public ArrayList<Event> getEvents()
-	{
-		return events;
-	}
-	
-	public void read(String query, String... args)
-	{
-		
-	}
-	
 	public ArrayList<Employee> readEmployees() throws Exception
 	{
 		ArrayList<Employee> employees = new ArrayList<Employee>();
@@ -103,7 +81,7 @@ public final class Database
 		{
 			// load MySql driver
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/feedback?user=USERNAME&password=PASSWORD");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/feedback?user=faf9072&password=xyreddf15");
 		}
 		catch (Exception e) { throw e; }
 		finally { close(); }

@@ -1,7 +1,18 @@
+import java.util.ArrayList;
+
 public class Main {
 
-	public void main() {
-
+	public static void main(String[] args) {
+		Database db = new Database();
+		try
+		{
+			ArrayList<Employee> employees = db.readEmployees();
+			System.out.println(employees);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
 	}
 	
 	public void addEmployeeToEvent(Employee e, Event a){
