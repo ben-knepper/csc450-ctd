@@ -80,8 +80,8 @@ begin
 end//
 
 create procedure UpdateVenue(
-	in v_column varchar(10)
-	in v_value varchar(50)
+	in v_column varchar(10),
+	in v_value varchar(50),
 	in v_venue varchar(10)
 )
 begin
