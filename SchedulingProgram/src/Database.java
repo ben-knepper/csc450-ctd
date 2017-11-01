@@ -4,6 +4,10 @@ import java.util.ArrayList;
 // based on www.vogella.com/tutorials/MySQLJava/article.html
 public final class Database
 {
+	private final String database_name = "faf9072";
+	private final String sql_username = "faf9072";
+	private final String sql_passwd = "xyreddf15";
+	
 	private Connection connection;
 	private Statement statement;
     private PreparedStatement preparedStatement;
@@ -81,7 +85,9 @@ public final class Database
 		{
 			// load MySql driver
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/feedback?user=faf9072&password=xyreddf15");
+			connection = DriverManager.getConnection(
+					"jdbc:mysql://webdev.cislabs.uncw.edu/~faf9072/" + database_name,
+					sql_username, sql_passwd);
 		}
 		catch (Exception e) { throw e; }
 		finally { close(); }
