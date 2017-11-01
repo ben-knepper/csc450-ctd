@@ -18,3 +18,8 @@
 *.zip
 *.tar.gz
 *.rar
+/bin/
+
+
+/lib/mysql-connector-java-5.1.44/
+/SchedulingProgram/lib/mysql-connector-java-5.1.44/
