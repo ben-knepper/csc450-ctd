@@ -3,12 +3,13 @@ drop procedure if exists GetTable;
 drop procedure if exists GetEmployeeInfo;
 drop procedure if exists AddEmployee;
 drop procedure if exists UpdateEmployee;
+drop procedure if exists UpdateManager;
 drop procedure if exists SearchEmployee;
 
+drop procedure if exists GetVenueInfo;
 drop procedure if exists AddVenue;
 drop procedure is exists UpdateVenue;
 drop procedure if exists SearchVenue;
-drop procedure if exists UpdateManager;
 
 delimiter //
 
@@ -19,6 +20,7 @@ begin
 	select * from t_name;
 end//
 
+/*Employee Procedures*/
 create procedure GetEmployeeInfo(
 	in f_name varchar(15),
 	in l_name varchar(15),
@@ -26,7 +28,7 @@ create procedure GetEmployeeInfo(
 )
 begin
 	select t_column from employee
-		where f_name =fName
+		where f_name = fName
 		and l_name = lName;
 end//
 
@@ -55,6 +57,15 @@ begin
 		where e_id = employeeID;
 end//
 
+create procedure UpdateManager(
+	in is_man boolean,
+	in e_id varchar(10)
+)
+begin
+	update employee set isManager = is_man
+		where e_id = employeeID;
+end//
+
 create procedure SearchEmployee(
 	in f_name varchar(15),
 	in l_name varchar(15)
@@ -65,6 +76,15 @@ begin
 		and l_name = lName;
 end//
 
+/*Venue Procedures*/
+create procedure GetVenueInfo(
+	in v_name varchar(10),
+	in t_column varchar(10)
+)
+begin
+	select t_column from venue
+		where v_name = name;
+end//
 
 create procedure AddVenue(
 	in venueID varchar(10),
@@ -95,16 +115,6 @@ create procedure SearchVenue(
 begin
 	select * from venue
 		where v_name = name;
-end//
-
-
-create procedure UpdateManager(
-	in is_man boolean,
-	in e_id varchar(10)
-)
-begin
-	update employee set isManager = is_man
-		where e_id = employeeID;
 end//
 
 delimiter ;

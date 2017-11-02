@@ -48,60 +48,22 @@ insert into employee values("917061", "Josefina", "Wiklund", "password40", "pho-
 insert into employee values("917063", "Emmie", "Hansson", "password41", "pho-num-0041", "email41@domain.com", "0");
 
 /*Insert data into venue table*/
-insert into venue values("BD1", "El Barco", "1", "address01");
-insert into venue values("BD2", "El Barco", "2", "address02");
-
-insert into venue values("BO", "Bordet", "1", "address03");
-
-insert into venue values("DD", "DD", "1", "address04");
-
-insert into venue values("DU1", "Dubliner", "1", "address05");
-insert into venue values("DU2", "Dubliner", "2", "address06");
-
-insert into venue values("EC1", "Event Casino", "1", "address07");
-insert into venue values("EC2", "Event Casino", "2", "address08");
-insert into venue values("EC3", "Event Casino", "3", "address09");
-
-insert into venue values("EX1", "Excet", "1", "address10");
-insert into venue values("EX2", "Excet", "2", "address11");
-insert into venue values("EX3", "Excet", "3", "address12");
-
-insert into venue values("FS1", "Flying Scotsman", "1", "address13");
-insert into venue values("FS2", "Flying Scotsman", "2", "address14");
-
-insert into venue values("HB", "Henriksberg", "1", "address15");
-
-insert into venue values("HR1", "Hard Rock Cafe GBG", "1", "address16");
-insert into venue values("HR2", "Hard Rock Cafe GBG", "2", "address17");
-
-insert into venue values("JP1", "John Scott's Palace", "1", "address18");
-insert into venue values("JP2", "John Scott's Palace", "2", "address19");
-
-insert into venue values("KB", "Kungsbacka", "1", "address20");
-
-insert into venue values("LA1", "Valand", "1", "address21");
-insert into venue values("LA2", "Valand", "2", "address22");
-insert into venue values("LA3", "Valand", "3", "address23");
-insert into venue values("LA4", "Valand", "4", "address24");
-insert into venue values("LA5", "Valand", "5", "address25");
-
-insert into venue values("OP1", "Ospecifierant Pass", "1", "address26");
-insert into venue values("OP2", "Ospecifierant Pass", "2", "address27");
-insert into venue values("OP3", "Ospecifierant Pass", "3", "address28");
-insert into venue values("OP4", "Ospecifierant Pass", "4", "address29");
-insert into venue values("OP5", "Ospecifierant Pass", "5", "address30");
-insert into venue values("OP6", "Ospecifierant Pass", "6", "address31");
-
-insert into venue values("RA", "Rastavlosen", "1", "address32");
-
-insert into venue values("RB1", "Rockbaren", "1", "address33");
-insert into venue values("RB2", "Rockbaren", "2", "address34");
-
-insert into venue values("SH", "Steakhouse Goteburg", "1", "address35");
-
-insert into venue values("TR1", "Tradgar'n Goteborg", "1", "address36");
-insert into venue values("TR2", "Tradgar'n Goteborg", "2", "address37");
-
-insert into venue values("VB", "Vasa Bar", "1", "address38");
-
-insert into venue values("VI", "Viiva", "1", "address39");
+insert into venue values("BD", "El Barco", "2", "address01");
+insert into venue values("BO", "Bordet", "1", "address02");
+insert into venue values("DD", "DD", "1", "address03");
+insert into venue values("DU", "Dubliner", "2", "address04");
+insert into venue values("EC", "Event Casino", "3", "address05");
+insert into venue values("EX", "Excet", "3", "address06");
+insert into venue values("FS", "Flying Scotsman", "2", "address07");
+insert into venue values("HB", "Henriksberg", "1", "address08");
+insert into venue values("HR", "Hard Rock Cafe GBG", "2", "address09");
+insert into venue values("JP", "John Scott's Palace", "2", "address10");
+insert into venue values("KB", "Kungsbacka", "1", "address11");
+insert into venue values("LA", "Valand", "5", "address12");
+insert into venue values("OP", "Ospecifierant Pass", "6", "address13");
+insert into venue values("RA", "Rastavlosen", "1", "address14");
+insert into venue values("RB", "Rockbaren", "2", "address15");
+insert into venue values("SH", "Steakhouse Goteburg", "1", "address16");
+insert into venue values("TR", "Tradgar'n Goteborg", "2", "address17");
+insert into venue values("VB", "Vasa Bar", "1", "address18");
+insert into venue values("VI", "Viiva", "1", "address19");
