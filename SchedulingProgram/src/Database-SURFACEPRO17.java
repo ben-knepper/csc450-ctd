@@ -4,8 +4,6 @@ import java.util.ArrayList;
 // based on www.vogella.com/tutorials/MySQLJava/article.html
 public final class Database
 {
-	private final String domain = "65.184.59.231";
-	private final String port = "3306";
 	private final String database_name = "csc450"; //"faf9072";
 	private final String sql_username = "ctd"; //"faf9072";
 	private final String sql_passwd = "eG*OSrpn4NZy"; //"xyreddf15";
@@ -24,7 +22,7 @@ public final class Database
 			
 			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
-					"SELECT * FROM employee");
+					"FROM employee SELECT *");
 			resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next())
@@ -60,7 +58,7 @@ public final class Database
 			
 			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
-					"SELECT * FROM venue");
+					"FROM venue SELECT *");
 			resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next())
@@ -88,10 +86,11 @@ public final class Database
 			// load MySql driver
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
-					"jdbc:mysql://" + domain + ":" + port + "/" + database_name,
+					"jdbc:mysql://65.184.59.231:3306/" + database_name,
 					sql_username, sql_passwd);
 		}
 		catch (Exception e) { throw e; }
+		finally { close(); }
 	}
 	
 	private void close()
