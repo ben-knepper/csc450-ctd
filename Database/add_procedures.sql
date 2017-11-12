@@ -47,6 +47,7 @@ begin
 end//
 
 create procedure AddEmployee(
+	in e_id varchar(10),
 	in fName varchar(15),
 	in lName varchar(15),
 	in password varchar(15),
@@ -57,7 +58,7 @@ create procedure AddEmployee(
 begin
 	insert into employee
 		values(
-			fName, lName, password, phone, email, isManager
+			e_id, fName, lName, password, phone, email, isManager
 		);
 end//
 
