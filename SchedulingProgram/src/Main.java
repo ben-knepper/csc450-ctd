@@ -6,8 +6,10 @@ public class Main {
 		Database db = new Database();
 		try
 		{
-			ArrayList<Employee> employees = db.readEmployees();
-			System.out.println(employees);
+			//ArrayList<Employee> employees = db.getEmployees();
+			//System.out.println(employees);
+			String info = db.getEmployeeInfo("Jennie", "Hansson", "password");
+			System.out.println(info);
 		}
 		catch (Exception e)
 		{
@@ -15,45 +17,45 @@ public class Main {
 		}
 	}
 	
-	public void addEmployeeToEvent(Employee e, Event a){
+	public void addEmployeeToEvent(Employee e, Event a)  {
 		
 	}
 	
-	public void swapEventEmployees(Employee e1, Employee e2, Event a1, Event a2){
+	public void swapEventEmployees(Employee e1, Employee e2, Event a1, Event a2) {
 		
 	}
 	
-	public void employeeBlacklistVenue(Employee e, Venue v){
+	public void employeeBlacklistVenue(Employee e, Venue v) {
 		
 	}
 	
-	public void employeeFavorVenue(Employee e, Venue v){
+	public void employeeFavorVenue(Employee e, Venue v) {
 		
 	}
 
-	public void venueBlacklistEmployee(Employee e, Venue v){
+	public void venueBlacklistEmployee(Employee e, Venue v) {
 	
 	}
-	public void venueFavorEmployee(Employee e, Venue v){
+	public void venueFavorEmployee(Employee e, Venue v) {
 	
 	}
-	public String requestAbsence(Employee e, Event a){
+	public String requestAbsence(Employee e, Event a) {
 		//returns an "absence request form" of type string
 		return "absence request #";
 	}
-	public String requestAbsence(Employee e, TimeSlot a){
+	public String requestAbsence(Employee e, TimeSlot a) {
 		//returns an "absence request form" of type string
 		return "absence request #";
 	}
-	public String changeSchedule(Employee e, Event a){
+	public String changeSchedule(Employee e, Event a) {
 		//returns an "schedule change form" of type string
 		return "schedule change #";
 	}
-	public String changeSchedule(Employee e, TimeSlot a){
+	public String changeSchedule(Employee e, TimeSlot a) {
 		//returns an "schedule change form" of type string
 		return "schedule change #";
 	}
-	public String dismissRequest(String request){
+	public String dismissRequest(String request) {
 		return "accept/reject";
 	}
 }

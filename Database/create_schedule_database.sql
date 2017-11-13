@@ -21,7 +21,7 @@ create table employee (
 create table venue (
 	venueID varchar(10),
 	name varchar(20),
-	tableNum varchar(5),
+	tableNum integer,
 	address varchar(50),
 	primary key(venueID)
 );

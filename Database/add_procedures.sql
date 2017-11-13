@@ -104,7 +104,7 @@ end//
 create procedure AddVenue(
 	in venueID varchar(10),
 	in name varchar(20),
-	in tableNum varchar(5),
+	in tableNum integer,
 	in address varchar(50)
 )
 begin
@@ -117,7 +117,7 @@ end//
 create procedure UpdateVenue(
 	in v_column varchar(10),
 	in v_value varchar(50),
-	in v_venue varchar(10)
+	in v_id varchar(10)
 )
 begin
 	update venue set v_column = v_value
