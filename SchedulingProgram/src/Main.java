@@ -95,16 +95,18 @@ public class Main {
 	
 	public Employee newEmployee(String f, String l, String i,
 			String p, String a) {
-		return new Employee(f, l, i, p, a);
+		Employee e = new Employee(f, l, i, p, a);
+		return e;
 	}
 	public Employee newManager(String f, String l, String i,
 			String p, String a) {
-		Employee e = new Employee(f, l, i, p, a);
-		e.setManager(true);
-		return e;
+		Employee m = new Employee(f, l, i, p, a);
+		m.setManager(true);
+		return m;
 	}
 	public Venue newVenue(String n, String a, int t) {
-		return new Venue(n, a, t);
+		Venue v = new Venue(n, a, t);
+		return v;
 		
 	}
 	public String requestAbsence(Employee e, Event a){
