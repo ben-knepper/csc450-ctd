@@ -7,7 +7,7 @@ public class Employee {
 	private String address;
 	private boolean manager;
 	private TimeSlot[] times;
-
+	private Database database;
 public Employee(String f, String l, String i,
 		String p, String a){
 	firstName = f;

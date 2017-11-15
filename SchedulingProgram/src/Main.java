@@ -7,7 +7,6 @@ public class Main {
 		try
 		{
 			ArrayList<Employee> employees = db.readEmployees();
-			System.out.println(employees);
 		}
 		catch (Exception e)
 		{

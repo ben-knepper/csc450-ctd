@@ -14,10 +14,11 @@ public final class Database
 	private Statement statement;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
+    private ArrayList<Employee> employees;
 	
 	public ArrayList<Employee> readEmployees() throws Exception
 	{
-		ArrayList<Employee> employees = new ArrayList<Employee>();
+		employees = new ArrayList<Employee>();
 		try
 		{
 			connect();

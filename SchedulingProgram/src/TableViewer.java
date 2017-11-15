@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 public class TableViewer extends JFrame {
 	Employee employee;
 	Venue venue;
-	static ScheduleViewer viewer = new ScheduleViewer();
+	static Viewer viewer = new Viewer();
 	private JButton employeeButton, venueButton;
 	private int day, size = 1;
 
@@ -28,7 +28,7 @@ public class TableViewer extends JFrame {
 		for (int i = 0; i < size; i++) {
 			data = new Object[][] {
 					{ "Jake", "Johnson",11121, "9196102512", viewer.getThisYear()},
-					{ "John", "Jackson", 11213, "9195120122", viewer.getThisMonth()} };
+					{ "John", "Jackson", 11213, "9195120122", viewer.getThisDay()} };
 		}
 		JTable table = new JTable(data, columns);
 		this.add(new JScrollPane(table));
