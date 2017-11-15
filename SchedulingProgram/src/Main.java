@@ -92,6 +92,21 @@ public class Main {
 	public void venueFavorEmployee(Employee e, Venue v){
 	
 	}
+	
+	public Employee newEmployee(String f, String l, String i,
+			String p, String a) {
+		return new Employee(f, l, i, p, a);
+	}
+	public Employee newManager(String f, String l, String i,
+			String p, String a) {
+		Employee e = new Employee(f, l, i, p, a);
+		e.setManager(true);
+		return e;
+	}
+	public Venue newVenue(String n, String a, int t) {
+		return new Venue(n, a, t);
+		
+	}
 	public String requestAbsence(Employee e, Event a){
 		return("#01 " + e.toString() + " absence request for " + a.toString());
 	}
