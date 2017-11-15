@@ -1,9 +1,9 @@
 
 public class Manager extends Employee {
 
-	public Manager(String f, String l, String i, String p, String a)
+	public Manager(String i, String f, String l, String ip, String p, String e)
 	{
-		super(f, l, i, p, a);
+		super(i, f, l, ip, p, e);
 		// TODO Auto-generated constructor stub
 	}
 

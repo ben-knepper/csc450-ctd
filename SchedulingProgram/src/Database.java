@@ -33,15 +33,16 @@ public final class Database
 				String id = resultSet.getString("employeeID");
 				String firstName = resultSet.getString("fName");
 				String lastName = resultSet.getString("lName");
+				String password = resultSet.getString("password");
 				String phone = resultSet.getString("phone");
 				String email = resultSet.getString("email");
 				boolean isManager = resultSet.getBoolean("isManager");
 				
 				Employee employee;
 				if (isManager)
-					employee = new Manager(id, firstName, lastName, phone, email);
+					employee = new Manager(id, firstName, lastName, password, phone, email);
 				else
-					employee = new Employee(id, firstName, lastName, phone, email);
+					employee = new Employee(id, firstName, lastName, password, phone, email);
 				employees.add(employee);
 			}
 		}
@@ -157,10 +158,11 @@ public final class Database
 			resultSet = preparedStatement.executeQuery();
 			
 			String eID = resultSet.getString("employeeID");
+			String password = resultSet.getString("password");
 			String phone = resultSet.getString("phone");
 			String email = resultSet.getString("email");
 			
-			employee = new Employee(eID, fName, lName, phone, email);
+			employee = new Employee(eID, fName, lName, password, phone, email);
 		}
 		catch (Exception e) { throw e; }
 		finally

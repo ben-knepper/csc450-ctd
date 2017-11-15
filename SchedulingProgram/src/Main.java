@@ -97,19 +97,17 @@ public class Main {
 	
 	}
 	
-	public Employee newEmployee(String f, String l, String i,
-			String p, String a) {
-		Employee e = new Employee(f, l, i, p, a);
-		return e;
+	public Employee newEmployee(String i, String f, String l, String ip, String p, String e) {
+		Employee emp = new Employee(i, f, l, ip, p, e);
+		return emp;
 	}
-	public Employee newManager(String f, String l, String i,
-			String p, String a) {
-		Employee m = new Employee(f, l, i, p, a);
+	public Employee newManager(String i, String f, String l, String ip, String p, String e) {
+		Employee m = new Employee(i, f, l, ip, p, e);
 		m.setManager(true);
 		return m;
 	}
-	public Venue newVenue(String n, String a, int t) {
-		Venue v = new Venue(n, a, t);
+	public Venue newVenue(String i, String n, int t, String a) {
+		Venue v = new Venue(i, n, t, a);
 		return v;
 		
 	}
