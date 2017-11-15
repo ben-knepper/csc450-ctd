@@ -12,14 +12,14 @@ public class Main {
 		Database db = new Database();
 		try
 		{
-<<<<<<< HEAD
-			ArrayList<Employee> employees = db.readEmployees();
-=======
+
+			ArrayList<Employee> employees = db.getEmployees();
+
 			//ArrayList<Employee> employees = db.getEmployees();
 			//System.out.println(employees);
 			String info = db.getEmployeeInfo("Jennie", "Hansson", "password");
 			System.out.println(info);
->>>>>>> f1cfb8e71e4e8be3c19664d2d20c26a10c9bc604
+
 		}
 		catch (Exception e)
 		{
@@ -62,7 +62,7 @@ public class Main {
 	public Employee tryEmployee(Event e, TimeSlot[] eventTimes){
 		//Tries to add an employee to an event.
 		Employee tempEmployee = null; //gets a random employee from the database
-		TimeSlot[] empTimes = tempEmployee.getTimes();
+		TimeSlot[] empTimes = tempEmployee.getTime();
 		if (scheduleCompatible(empTimes, eventTimes)){
 			return tempEmployee;
 		} else {
