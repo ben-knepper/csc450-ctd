@@ -14,17 +14,18 @@ public final class Database
 	private Statement statement;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
+    private ArrayList<Employee> employees;
 	
     //Employee functions
 	public ArrayList<Employee> getEmployees() throws Exception
 	{
-		ArrayList<Employee> employees = new ArrayList<Employee>();
+		employees = new ArrayList<Employee>();
 		try
 		{
 			connect();
 			
 			preparedStatement = connection.prepareStatement(
-					"call GetTable(employee)");
+					"call GetTable(employee);");
 			resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next())
@@ -60,7 +61,7 @@ public final class Database
 			connect();
 			
 			preparedStatement = connection.prepareStatement(
-					"call GetEmployeeInfo(?, ?, ?)");
+					"call GetEmployeeInfo(?, ?, ?);");
 			preparedStatement.setString(1, fName);
 			preparedStatement.setString(2, lName);
 			preparedStatement.setString(3, column);
@@ -83,7 +84,7 @@ public final class Database
 			connect();
 			
 			preparedStatement = connection.prepareStatement(
-					"call AddEmployee(?, ?, ?, ?, ?, ?, ?)");
+					"call AddEmployee(?, ?, ?, ?, ?, ?, ?);");
 			preparedStatement.setString(1, eID);
 			preparedStatement.setString(2, fName);
 			preparedStatement.setString(3, lName);
@@ -108,7 +109,7 @@ public final class Database
 			connect();
 		
 			preparedStatement = connection.prepareStatement(
-					"call UpdateEmployee(?, ?, ?)");
+					"call UpdateEmployee(?, ?, ?);");
 			preparedStatement.setString(1, column);
 			preparedStatement.setString(2, value);
 			preparedStatement.setString(3, ID);
@@ -129,7 +130,7 @@ public final class Database
 			connect();
 		
 			preparedStatement = connection.prepareStatement(
-					"call UpdateManager(?, ?)");
+					"call UpdateManager(?, ?);");
 			preparedStatement.setBoolean(1, isMan);
 			preparedStatement.setString(2, eID);
 		
@@ -150,7 +151,7 @@ public final class Database
 			connect();
 			
 			preparedStatement = connection.prepareStatement(
-					"call SearchEmployee(?, ?)");
+					"call SearchEmployee(?, ?);");
 			preparedStatement.setString(1, fName);
 			preparedStatement.setString(2, lName);
 			resultSet = preparedStatement.executeQuery();
@@ -178,7 +179,7 @@ public final class Database
 			connect();
 			
 			preparedStatement = connection.prepareStatement(
-					"call GetTable(venue)");
+					"call GetTable(venue);");
 			resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next())
@@ -208,7 +209,7 @@ public final class Database
 			connect();
 			
 			preparedStatement = connection.prepareStatement(
-					"call GetVenueInfo(?, ?)");
+					"call GetVenueInfo(?, ?);");
 			preparedStatement.setString(1, name);
 			preparedStatement.setString(3, column);
 			resultSet = preparedStatement.executeQuery();
@@ -252,7 +253,7 @@ public final class Database
 			connect();
 
 			preparedStatement = connection.prepareStatement(
-					"call UpdateVenue(?, ?, ?)");
+					"call UpdateVenue(?, ?, ?);");
 			preparedStatement.setString(1, column);
 			preparedStatement.setString(2, value);
 			preparedStatement.setString(3, ID);

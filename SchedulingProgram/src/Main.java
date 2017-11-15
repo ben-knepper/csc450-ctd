@@ -12,10 +12,14 @@ public class Main {
 		Database db = new Database();
 		try
 		{
+
+			ArrayList<Employee> employees = db.getEmployees();
+
 			//ArrayList<Employee> employees = db.getEmployees();
 			//System.out.println(employees);
 			String info = db.getEmployeeInfo("Jennie", "Hansson", "password");
 			System.out.println(info);
+
 		}
 		catch (Exception e)
 		{
@@ -58,7 +62,7 @@ public class Main {
 	public Employee tryEmployee(Event e, TimeSlot[] eventTimes){
 		//Tries to add an employee to an event.
 		Employee tempEmployee = null; //gets a random employee from the database
-		TimeSlot[] empTimes = tempEmployee.getTimes();
+		TimeSlot[] empTimes = tempEmployee.getTime();
 		if (scheduleCompatible(empTimes, eventTimes)){
 			return tempEmployee;
 		} else {
@@ -91,6 +95,23 @@ public class Main {
 	}
 	public void venueFavorEmployee(Employee e, Venue v){
 	
+	}
+	
+	public Employee newEmployee(String f, String l, String i,
+			String p, String a) {
+		Employee e = new Employee(f, l, i, p, a);
+		return e;
+	}
+	public Employee newManager(String f, String l, String i,
+			String p, String a) {
+		Employee m = new Employee(f, l, i, p, a);
+		m.setManager(true);
+		return m;
+	}
+	public Venue newVenue(String n, String a, int t) {
+		Venue v = new Venue(n, a, t);
+		return v;
+		
 	}
 	public String requestAbsence(Employee e, Event a){
 		return("#01 " + e.toString() + " absence request for " + a.toString());
