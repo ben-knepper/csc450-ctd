@@ -47,6 +47,7 @@ begin
 end//
 
 create procedure AddEmployee(
+	in e_id varchar(10),
 	in fName varchar(15),
 	in lName varchar(15),
 	in password varchar(15),
@@ -57,7 +58,7 @@ create procedure AddEmployee(
 begin
 	insert into employee
 		values(
-			fName, lName, password, phone, email, isManager
+			e_id, fName, lName, password, phone, email, isManager
 		);
 end//
 
@@ -103,7 +104,7 @@ end//
 create procedure AddVenue(
 	in venueID varchar(10),
 	in name varchar(20),
-	in tableNum varchar(5),
+	in tableNum integer,
 	in address varchar(50)
 )
 begin
@@ -116,7 +117,7 @@ end//
 create procedure UpdateVenue(
 	in v_column varchar(10),
 	in v_value varchar(50),
-	in v_venue varchar(10)
+	in v_id varchar(10)
 )
 begin
 	update venue set v_column = v_value

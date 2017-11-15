@@ -16,7 +16,8 @@ public final class Database
     private ResultSet resultSet;
     private ArrayList<Employee> employees;
 	
-	public ArrayList<Employee> readEmployees() throws Exception
+    //Employee functions
+	public ArrayList<Employee> getEmployees() throws Exception
 	{
 		employees = new ArrayList<Employee>();
 		try
@@ -25,23 +26,23 @@ public final class Database
 			
 			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
-					"SELECT * FROM employee");
+					"call GetTable(employee)");
 			resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next())
 			{
+				String id = resultSet.getString("employeeID");
 				String firstName = resultSet.getString("fName");
 				String lastName = resultSet.getString("lName");
-				String id = resultSet.getString("employeeID");
 				String phone = resultSet.getString("phone");
 				String email = resultSet.getString("email");
 				boolean isManager = resultSet.getBoolean("isManager");
 				
 				Employee employee;
 				if (isManager)
-					employee = new Manager(firstName, lastName, id, phone, email);
+					employee = new Manager(id, firstName, lastName, phone, email);
 				else
-					employee = new Employee(firstName, lastName, id, phone, email);
+					employee = new Employee(id, firstName, lastName, phone, email);
 				employees.add(employee);
 			}
 		}
@@ -52,7 +53,130 @@ public final class Database
 		}
 		return employees;
 	}
-	public ArrayList<Venue> readVenues() throws Exception
+	
+	public String getEmployeeInfo(String fName, String lName, String column) throws Exception
+	{
+		String info = new String();
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call GetEmployeeInfo(?, ?, ?)");
+			preparedStatement.setString(1, fName);
+			preparedStatement.setString(2, lName);
+			preparedStatement.setString(3, column);
+			resultSet = preparedStatement.executeQuery();
+			
+			info = resultSet.getString(column);
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+		return info;
+	}
+	
+	public void addEmployee(String eID, String fName, String lName, String password, String phone, String email, Boolean isManager) throws Exception
+	{
+		try
+		{
+			connect();
+			
+			statement = connection.createStatement();
+			preparedStatement = connection.prepareStatement(
+					"call AddEmployee(?, ?, ?, ?, ?, ?, ?)");
+			preparedStatement.setString(1, eID);
+			preparedStatement.setString(2, fName);
+			preparedStatement.setString(3, lName);
+			preparedStatement.setString(4, password);
+			preparedStatement.setString(5, phone);
+			preparedStatement.setString(6, email);
+			preparedStatement.setBoolean(7, isManager);
+			
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+	}
+	
+	public void updateEmployee(String column, String value, String ID) throws Exception
+	{
+		try
+		{
+			connect();
+		
+			statement = connection.createStatement();
+			preparedStatement = connection.prepareStatement(
+					"call UpdateEmployee(?, ?, ?)");
+			preparedStatement.setString(1, column);
+			preparedStatement.setString(2, value);
+			preparedStatement.setString(3, ID);
+		
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+	}
+	
+	public void updateManager(Boolean isMan, String eID) throws Exception
+	{
+		try
+		{
+			connect();
+		
+			statement = connection.createStatement();
+			preparedStatement = connection.prepareStatement(
+					"call UpdateManager(?, ?)");
+			preparedStatement.setBoolean(1, isMan);
+			preparedStatement.setString(2, eID);
+		
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+	}
+	
+	public Employee searchEmployee(String fName, String lName) throws Exception
+	{
+		Employee employee;
+		try
+		{
+			connect();
+			
+			statement = connection.createStatement();
+			preparedStatement = connection.prepareStatement(
+					"call SearchEmployee(?, ?)");
+			preparedStatement.setString(1, fName);
+			preparedStatement.setString(2, lName);
+			resultSet = preparedStatement.executeQuery();
+			
+			String eID = resultSet.getString("employeeID");
+			String phone = resultSet.getString("phone");
+			String email = resultSet.getString("email");
+			
+			employee = new Employee(eID, fName, lName, phone, email);
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+		return employee;
+	}
+	
+	//Venue functions
+	public ArrayList<Venue> getVenues() throws Exception
 	{
 		ArrayList<Venue> venues = new ArrayList<Venue>();
 		try
@@ -61,16 +185,17 @@ public final class Database
 			
 			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
-					"SELECT * FROM venue");
+					"call GetTable(venue)");
 			resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next())
 			{
+				String id = resultSet.getString("venueID");
 				String name = resultSet.getString("name");
-				String address = resultSet.getString("address");
 				int tables = resultSet.getInt("tableNum");
+				String address = resultSet.getString("address");
 				
-				Venue venue = new Venue(name, address, tables);
+				Venue venue = new Venue(id, name, tables, address);
 				venues.add(venue);
 			}
 		}
@@ -82,6 +207,102 @@ public final class Database
 		return venues;
 	}
 	
+	public String getVenueInfo(String name, String column) throws Exception
+	{
+		String info = new String();
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call GetVenueInfo(?, ?)");
+			preparedStatement.setString(1, name);
+			preparedStatement.setString(3, column);
+			resultSet = preparedStatement.executeQuery();
+			
+			info = resultSet.getString(column);
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+		return info;
+	}
+	
+	public void addEmployee(String vID, String name, String tables, String address) throws Exception
+	{
+		try
+		{
+			connect();
+			
+			statement = connection.createStatement();
+			preparedStatement = connection.prepareStatement(
+					"call AddVenue(?, ?, ?, ?)");
+			preparedStatement.setString(1, vID);
+			preparedStatement.setString(2, name);
+			preparedStatement.setString(3, tables);
+			preparedStatement.setString(4, address);
+			
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+	}
+	
+	public void updateVenue(String column, String value, String ID) throws Exception
+	{
+		try
+		{
+			connect();
+		
+			statement = connection.createStatement();
+			preparedStatement = connection.prepareStatement(
+					"call UpdateVenue(?, ?, ?)");
+			preparedStatement.setString(1, column);
+			preparedStatement.setString(2, value);
+			preparedStatement.setString(3, ID);
+		
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+	}
+		
+	public Venue searchVenue(String name) throws Exception
+	{
+		Venue venue;
+		try
+		{
+			connect();
+			
+			statement = connection.createStatement();
+			preparedStatement = connection.prepareStatement(
+					"call SearchVenue(?)");
+			preparedStatement.setString(1, name);
+			resultSet = preparedStatement.executeQuery();
+			
+			String vID = resultSet.getString("venueID");
+			int tables = resultSet.getInt("tableNum");
+			String address = resultSet.getString("address");
+			
+			venue = new Venue(vID, name, tables, address);
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+		return venue;
+	}
+	
+	//Connection functions
 	private void connect() throws Exception
 	{
 		try

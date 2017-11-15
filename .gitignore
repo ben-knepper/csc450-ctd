@@ -19,3 +19,7 @@
 *.tar.gz
 *.rar
 /bin/
+
+.gitignore
+.classpath
+.project
