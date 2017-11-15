@@ -23,7 +23,6 @@ public final class Database
 		{
 			connect();
 			
-			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
 					"call GetTable(employee)");
 			resultSet = preparedStatement.executeQuery();
@@ -83,7 +82,6 @@ public final class Database
 		{
 			connect();
 			
-			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
 					"call AddEmployee(?, ?, ?, ?, ?, ?, ?)");
 			preparedStatement.setString(1, eID);
@@ -109,7 +107,6 @@ public final class Database
 		{
 			connect();
 		
-			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
 					"call UpdateEmployee(?, ?, ?)");
 			preparedStatement.setString(1, column);
@@ -131,7 +128,6 @@ public final class Database
 		{
 			connect();
 		
-			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
 					"call UpdateManager(?, ?)");
 			preparedStatement.setBoolean(1, isMan);
@@ -153,7 +149,6 @@ public final class Database
 		{
 			connect();
 			
-			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
 					"call SearchEmployee(?, ?)");
 			preparedStatement.setString(1, fName);
@@ -182,7 +177,6 @@ public final class Database
 		{
 			connect();
 			
-			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
 					"call GetTable(venue)");
 			resultSet = preparedStatement.executeQuery();
@@ -229,13 +223,12 @@ public final class Database
 		return info;
 	}
 	
-	public void addEmployee(String vID, String name, String tables, String address) throws Exception
+	public void addVenue(String vID, String name, String tables, String address) throws Exception
 	{
 		try
 		{
 			connect();
 			
-			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
 					"call AddVenue(?, ?, ?, ?)");
 			preparedStatement.setString(1, vID);
@@ -257,8 +250,7 @@ public final class Database
 		try
 		{
 			connect();
-		
-			statement = connection.createStatement();
+
 			preparedStatement = connection.prepareStatement(
 					"call UpdateVenue(?, ?, ?)");
 			preparedStatement.setString(1, column);
@@ -281,7 +273,6 @@ public final class Database
 		{
 			connect();
 			
-			statement = connection.createStatement();
 			preparedStatement = connection.prepareStatement(
 					"call SearchVenue(?)");
 			preparedStatement.setString(1, name);
@@ -299,6 +290,86 @@ public final class Database
 			close();
 		}
 		return venue;
+	}
+	
+	//Blacklisted functions
+	public ArrayList<ArrayList<String>> getBlacklisted() throws Exception
+	{
+		ArrayList<String> blacklist = new ArrayList<String>();
+		ArrayList<ArrayList<String>> blacklists = new ArrayList<ArrayList<String>>();
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call GetTable(blacklisted)");
+			resultSet = preparedStatement.executeQuery();
+			
+			while (resultSet.next());
+			{
+				String eID = resultSet.getString("employeeID");
+				String vID = resultSet.getString("venueID");
+				
+				blacklist.add(eID);
+				blacklist.add(vID);
+				blacklists.add(blacklist);
+				
+				blacklist.clear();
+			}
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+		return blacklists;
+	}
+	
+	public void addBlacklisted(String eID, String vID) throws Exception
+	{
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call AddBlacklisted(?, ?)");
+			preparedStatement.setString(1, eID);
+			preparedStatement.setString(2, vID);
+			
+			preparedStatement.executeUpdate();					
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+	}
+	
+	public ArrayList<String> searchBlacklistedEmployee(String eID) throws Exception
+	{
+		ArrayList<String> blacklistedEmp = new ArrayList<String>();
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call SearchBlacklistedEmployee(?)");
+			preparedStatement.setString(1, eID);
+			resultSet = preparedStatement.executeQuery();
+			
+			while (resultSet.next())
+			{
+				String vID = resultSet.getString("venueID");
+				
+				blacklistedEmp.add(vID);
+			}
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+		return blacklistedEmp;
 	}
 	
 	//Connection functions
