@@ -1,85 +1,149 @@
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.TableCellRenderer;
 
-import javax.swing.border.MatteBorder;
-import javax.swing.*;
-import javax.swing.UIManager.LookAndFeelInfo;
-
-import net.miginfocom.swing.MigLayout;
-
+/**
+ * Viewer class that implements JButton objects into a 2d Object array viewable
+ * on a JTable. Objects are clickable to display information related to the
+ * object in question. JButtons have their own instance so data can be
+ * manipulated to display individualized data.
+ * 
+ * 
+ *	http://camposha.info/source/java-jtable-button-column/
+ */
 public class Viewer extends JFrame {
-	JFrame frame;
-	JPanel panel = new JPanel();
-	JButton[] btnEmployees = new JButton[40];
-	JLabel[] columnTitles;
-	String[] daysOfTheWeek = { "Name", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-
-	/**
-	 * Initializes Viewer in a Mig Layout. Goal is to have Name and the days of
-	 * the week on the top row, with employee names in the left (including their
-	 * phone number), and in each cell after the employee's name, it will show
-	 * where that employee works that day(most likely displayed in a short 3-4
-	 * letter format for the **VENUE** with the hours.
-	 * 
-	 * 
-	 * VENUE: Idea is to make it a JButton so when the user clicks on it, it
-	 * will open a new window and display relevant information to that venue
-	 * i.e. phone number, venue id, normal operating hours etc. If we do not
-	 * know actual values, we can make them up.
-	 */
 	public Viewer() {
-		/**
-		 * Adjusts Viewer Window to Nimbus Theme. Looks better than default. We
-		 * can change to something else later if we do not like.
-		 */
-		try {
-			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (Exception e) {
-		}
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocation(0, 0);
-		setSize(new Dimension(600, 800));
-		setLayout(new MigLayout(""));
-		panel.setLayout(new MigLayout(""));
+		// FORM TITLE
+		super("Table Schedule View");
+		
+		Time date = new Time();
+		
+		// Table Data
+		String[] colNames = new String[date.daysInMonth]; // Test length for column titles
+		String[] employees = new String[40];
+		Object[][] data = new Object[employees.length][colNames.length]; // Initializes data array to employee length as rows and colNames length as columns
+		
 
-		columnTitles = new JLabel[daysOfTheWeek.length];
-		// Adds initial column titles and makes it load into the first row before actual data gets populated in the layout.
-		for (int i = 0; i < daysOfTheWeek.length; i++) {
-			columnTitles[i] = new JLabel(daysOfTheWeek[i]);
-			panel.add(columnTitles[i]);
-		}
-		// Skips to new row in the layout.
-		panel.add(new JLabel(""), "wrap");
-		// Adds employee name buttons to panel. Cannot load actual employee data from database so using test strings for now.
-		for (int i = 0; i < 40; i++) {
-			btnEmployees[i] = new JButton("Employee " + (i + 1));
-			panel.add(btnEmployees[i], "wrap");
+		for (int i = 0; i < employees.length; i++) {
+			employees[i] = ("Employee " + i);
+			data[i][0] = employees[i];
+
 		}
 		
-		// Sets a border color around panel. I want to create a border around
-		// each cell that becomes populated. Not sure how to do it yet, any
-		// ideas would be cool thnx.
-		panel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
-		add(panel);
-		setVisible(true);
+		JTable table = new JTable(data, colNames);
+
+		// Sets a particular Column as JButtons
+		table.getColumnModel().getColumn(0).setCellRenderer(new ButtonRenderer());
+		;
+
+		// SET CUSTOM EDITOR TO TEAMS COLUMN
+		table.getColumnModel().getColumn(0).setCellEditor(new ButtonEditor(new JTextField()));
+
+		// SCROLLPANE,SET SZE,SET CLOSE OPERATION
+		JScrollPane pane = new JScrollPane(table);
+		getContentPane().add(pane);
+		setSize(600, 400);
+
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
-	/**
-	 * Test main to check if it works. Has not been tested to work in other
-	 * classes yet.
-	 * 
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		Viewer viewer = new Viewer();
-	};
+		Viewer bc = new Viewer();
+		bc.setVisible(true);
+	}
+}
 
+ /**
+  *  Necessary Renderer class to override JTables distaste for JButtons being inserted normally.
+  *  
+  * @author Classical
+  *
+  */
+class ButtonRenderer extends JButton implements TableCellRenderer {
+	// CONSTRUCTOR
+	public ButtonRenderer() {
+		setOpaque(true);
+	}
+
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object obj, boolean selected, boolean focused, int row,
+			int col) {
+
+		// SET PASSED OBJECT AS BUTTON TEXT
+		setText((obj == null) ? "" : obj.toString());
+
+		return this;
+	}
+
+}
+
+/**
+ * 
+ * @author Classical
+ *
+ */
+class ButtonEditor extends DefaultCellEditor {
+	protected JButton btn;
+	private String lbl;
+	private Boolean clicked;
+
+	public ButtonEditor(JTextField txt) {
+		super(txt);
+
+		btn = new JButton();
+		btn.setOpaque(true);
+
+		// WHEN BUTTON IS CLICKED
+		btn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				fireEditingStopped();
+			}
+		});
+	}
+
+	// OVERRIDE A COUPLE OF METHODS
+	@Override
+	public Component getTableCellEditorComponent(JTable table, Object obj, boolean selected, int row, int col) {
+		// SET TEXT TO BUTTON,SET CLICKED TO TRUE,THEN RETURN THE BTN OBJECT
+		lbl = (obj == null) ? "" : obj.toString();
+		btn.setText(lbl);
+		clicked = true;
+		return btn;
+	}
+
+	// IF BUTTON CELL VALUE CHNAGES,IF CLICKED THAT IS
+	@Override
+	public Object getCellEditorValue() {
+		if (clicked) {
+			// SHOW US SOME MESSAGE
+			JOptionPane.showMessageDialog(btn, lbl + " Clicked");
+		}
+		// SET IT TO FALSE NOW THAT ITS CLICKED
+		clicked = false;
+		return new String(lbl);
+	}
+
+	@Override
+	public boolean stopCellEditing() {
+		// SET CLICKED TO FALSE FIRST
+		clicked = false;
+		return super.stopCellEditing();
+	}
+
+	@Override
+	protected void fireEditingStopped() {
+		// TODO Auto-generated method stub
+		super.fireEditingStopped();
+	}
 }
