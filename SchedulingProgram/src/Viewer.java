@@ -16,7 +16,7 @@ import javax.swing.table.TableCellRenderer;
  * object in question. JButtons have their own instance so data can be
  * manipulated to display individualized data.
  * 
- * 
+ *
  *	http://camposha.info/source/java-jtable-button-column/
  */
 public class Viewer extends JFrame {
@@ -27,12 +27,15 @@ public class Viewer extends JFrame {
 		Time date = new Time();
 		
 		// Table Data
-		String[] colNames = new String[date.daysInMonth]; // Test length for column titles
+		int[] colLength = new int[date.daysInMonth];
+		String[] colNames = {"Name","Monday","Tuesday", "Wednesday", "Thursday","Friday","Saturday"}; // Test length for column titles
+		
 		String[] employees = new String[40];
 		Object[][] data = new Object[employees.length][colNames.length]; // Initializes data array to employee length as rows and colNames length as columns
 		
 
-		for (int i = 0; i < employees.length; i++) {
+		for (int i = 0; i < colLength.length; i++) {
+			colLength [i] = i;
 			employees[i] = ("Employee " + i);
 			data[i][0] = employees[i];
 
