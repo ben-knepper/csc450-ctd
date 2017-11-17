@@ -1,6 +1,10 @@
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Random;
+
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,6 +13,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.*;
 
 /**
  * Viewer class that implements JButton objects into a 2d Object array viewable
@@ -23,29 +30,46 @@ public class Viewer extends JFrame {
 	public Viewer() {
 		// FORM TITLE
 		super("Table Schedule View");
-		
 		Time date = new Time();
-		
+		JTable table;
+		TableColumn columnModel;
 		// Table Data
-		int[] colLength = new int[date.daysInMonth];
-		String[] colNames = {"Name","Monday","Tuesday", "Wednesday", "Thursday","Friday","Saturday"}; // Test length for column titles
+		int[] colLength = new int[date.getDaysInMonth()+1]; //Creates an int array equal to the length of days for the current month + 1 (So the value lines up with other column names that may be added.
+		ArrayList<String> colNames = new ArrayList<String>();// Test length for column titles
+		String[] employees = new String[colLength.length];
+		String[] dayInfo = new String[colLength.length];
+		Object[][] data = new Object[employees.length][colLength.length]; // Initializes data array to employee length as rows and colNames length as columns
 		
-		String[] employees = new String[40];
-		Object[][] data = new Object[employees.length][colNames.length]; // Initializes data array to employee length as rows and colNames length as columns
-		
-
+		// Sets data in each of the data Object's cells
 		for (int i = 0; i < colLength.length; i++) {
-			colLength [i] = i;
+			colNames.add(Integer.toString(i));
 			employees[i] = ("Employee " + i);
+			dayInfo[i] = ("Venue " + i);
 			data[i][0] = employees[i];
+			for(int j = 1; j < colLength.length; j++){
+				data[i][j] = dayInfo[i];
+			}
 
 		}
 		
-		JTable table = new JTable(data, colNames);
+		colNames.set(0, "Name");
+		table = new JTable(data, colNames.toArray());
+		
+		// Table resizing
+		table.setAutoResizeMode(table.AUTO_RESIZE_OFF);
+		columnModel = table.getColumnModel().getColumn(0);
+		columnModel.setPreferredWidth(120);
+		for(int i = 1; i < colLength.length; i++){
+			table.setRowHeight(20);
+			columnModel = table.getColumnModel().getColumn(i);
+			columnModel.setPreferredWidth(60);
+		}
+		
+
 
 		// Sets a particular Column as JButtons
 		table.getColumnModel().getColumn(0).setCellRenderer(new ButtonRenderer());
-		;
+
 
 		// SET CUSTOM EDITOR TO TEAMS COLUMN
 		table.getColumnModel().getColumn(0).setCellEditor(new ButtonEditor(new JTextField()));
@@ -53,7 +77,7 @@ public class Viewer extends JFrame {
 		// SCROLLPANE,SET SZE,SET CLOSE OPERATION
 		JScrollPane pane = new JScrollPane(table);
 		getContentPane().add(pane);
-		setSize(600, 400);
+		setSize(1000, 800);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
@@ -97,6 +121,7 @@ class ButtonEditor extends DefaultCellEditor {
 	protected JButton btn;
 	private String lbl;
 	private Boolean clicked;
+	JDialog infoBox = new JDialog();
 
 	public ButtonEditor(JTextField txt) {
 		super(txt);
@@ -129,8 +154,7 @@ class ButtonEditor extends DefaultCellEditor {
 	@Override
 	public Object getCellEditorValue() {
 		if (clicked) {
-			// SHOW US SOME MESSAGE
-			JOptionPane.showMessageDialog(btn, lbl + " Clicked");
+			JOptionPane.showMessageDialog(null,"Fix me");
 		}
 		// SET IT TO FALSE NOW THAT ITS CLICKED
 		clicked = false;

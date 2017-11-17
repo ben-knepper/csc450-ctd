@@ -13,17 +13,14 @@ public class Time {
 	Calendar calendar;
 	public Time(){
 		calendar = Calendar.getInstance();
-		month = Calendar.getInstance().get(Calendar.MONTH)+1;
-		year = Calendar.getInstance().get(Calendar.YEAR);
-		yearMonthObject = YearMonth.of(year, month);
-		daysInMonth = yearMonthObject.lengthOfMonth();
-		System.out.println(year);
-		System.out.println(month);
-		System.out.println(daysInMonth);
+
 	}
 
 	
 	public int getDaysInMonth() {
+		month = Calendar.getInstance().get(Calendar.MONTH)+1;
+		year = Calendar.getInstance().get(Calendar.YEAR);
+		yearMonthObject = YearMonth.of(year, month);
 		daysInMonth = yearMonthObject.lengthOfMonth();
 		return daysInMonth;
 	}
