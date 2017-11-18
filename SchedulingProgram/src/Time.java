@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Time {
-	YearMonth yearMonthObject;// = YearMonth.of(1999, 2);
-	int daysInMonth;// = yearMonthObject.lengthOfMonth(); 
+	YearMonth yearMonthObject;
+	int daysInMonth;
 	int month;
 	int year;
 	
