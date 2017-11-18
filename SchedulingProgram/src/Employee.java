@@ -82,6 +82,7 @@ public class Employee {
 	public TimeSlot[] getTimes() {
 		return times;
 	}
+	
 	public String toString() {
 		return(this.firstName + " " + this.lastName + " " + id);
 	}

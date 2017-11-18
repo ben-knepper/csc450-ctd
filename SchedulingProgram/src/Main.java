@@ -15,10 +15,7 @@ public class Main {
 
 			ArrayList<Employee> employees = db.getEmployees();
 
-			//ArrayList<Employee> employees = db.getEmployees();
-			//System.out.println(employees);
-			String info = db.getEmployeeInfo("Jennie", "Hansson", "password");
-			System.out.println(info);
+			System.out.println(employees);
 
 		}
 		catch (Exception e)
@@ -62,7 +59,7 @@ public class Main {
 	public Employee tryEmployee(Event e, TimeSlot[] eventTimes){
 		//Tries to add an employee to an event.
 		Employee tempEmployee = null; //gets a random employee from the database
-		TimeSlot[] empTimes = tempEmployee.getTime();
+		TimeSlot[] empTimes = tempEmployee.getTimes();
 		if (scheduleCompatible(empTimes, eventTimes)){
 			return tempEmployee;
 		} else {

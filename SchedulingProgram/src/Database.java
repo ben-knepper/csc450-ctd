@@ -350,7 +350,7 @@ public final class Database
 	
 	public ArrayList<String> searchBlacklistedEmployee(String eID) throws Exception
 	{
-		ArrayList<String> blacklistedEmp = new ArrayList<String>();
+		ArrayList<String> blacklistedVenues = new ArrayList<String>();
 		try
 		{
 			connect();
@@ -364,7 +364,7 @@ public final class Database
 			{
 				String vID = resultSet.getString("venueID");
 				
-				blacklistedEmp.add(vID);
+				blacklistedVenues.add(vID);
 			}
 		}
 		catch (Exception e) { throw e; }
@@ -372,7 +372,7 @@ public final class Database
 		{
 			close();
 		}
-		return blacklistedEmp;
+		return blacklistedVenues;
 	}
 	
 	//Connection functions
