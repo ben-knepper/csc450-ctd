@@ -74,10 +74,22 @@ public class Employee {
 	public void setManager(boolean manager) {
 		this.manager = manager;
 	}
-	
-	public void setTime(TimeSlot t) {
-		//TODO
+
+	public void addTimes(TimeSlot t){
+		int iden = t.getId();
+
+		times.put(new TimeSlot(iden), "y");
 	}
+	public void removeTimes(TimeSlot t){
+		int iden = t.getId();
+
+		times.put(new TimeSlot(iden), "n");
+	}
+	public void blockTimes(TimeSlot t){
+		int iden = t.getId();
+
+		times.put(new TimeSlot(iden), "b");
+}
 
 	public TimeSlot[] getTimes() {
 		return times;
