@@ -79,51 +79,105 @@ public class Main {
 		a2.addEmployee(e1);
 	}
 	
+	
 	public void employeeBlacklistVenue(Employee e, Venue v){
-		
+		Database.blacklist(e, v);
 	}
 	
 	public void employeeFavorVenue(Employee e, Venue v){
-		
+		Database.favorplusone(e, v);
+	
 	}
 
 	public void venueBlacklistEmployee(Employee e, Venue v){
+		Database.blacklist(e, v);
 	
 	}
 	public void venueFavorEmployee(Employee e, Venue v){
+		Database.favorplusone(e, v); 
 	
 	}
-	
-	public Employee newEmployee(String i, String f, String l, String ip, String p, String e) {
-		Employee emp = new Employee(i, f, l, ip, p, e);
-		return emp;
+	public Employee newEmployee(String f, String l, String i,
+			String p, String a, String ip, String E) {
+		Employee e = new Employee(f, l, i, p, a, ip, E);
+		return e;
 	}
-	public Employee newManager(String i, String f, String l, String ip, String p, String e) {
-		Employee m = new Employee(i, f, l, ip, p, e);
+	public Employee newManager(String f, String l, String i,
+			String p, String a, String ip, String E) {
+		Employee m = new Employee(f, l, i, p, a, ip, E);
 		m.setManager(true);
 		return m;
 	}
-	public Venue newVenue(String i, String n, int t, String a) {
-		Venue v = new Venue(i, n, t, a);
+	public Venue newVenue(String id, String n, String a, int t) {
+		Venue v = new Venue(id, n, a, t);
 		return v;
 		
 	}
-	public String requestAbsence(Employee e, Event a){
-		return("#01 " + e.toString() + " absence request for " + a.toString());
+
+	public Request requestAbsence(Employee e, Event a){
+		String message = ("#01 " + e.toString() + " absence request for " + a.toString());
+		return new Request(e, a, 1, message);
 	}
-	public String requestAbsence(Employee e, TimeSlot a){
+	public Request requestAbsence(Employee e, TimeSlot a){
 		//returns an "absence request form" of type string
-		return("#02 " + e.toString() + "absence request for" + a.toString());
+		String message = ("#02 " + e.toString() + "absence request for" + a.toString());
+		return new Request(e, a, 2, message);
 	}
-	public String addTimeslot(Employee e, Event a){
+	public Request addTimeslot(Employee e, Event a){
 		//check the database to determine functionality
-		return "#03 " + e.toString() + "has new timeslot" + a.toString();
+		String message = ("#03 " + e.toString() + "has new timeslot" + a.toString());
+		return new Request(e, a, 3, message);
 	}
-	public String removeTimeslot(Employee e, TimeSlot a){
+	public Request removeTimeslot(Employee e, TimeSlot a){
 		//check the database to determine functionality
-		return "#03 " + e.toString() + "removal request for" + a.toString();
+		String message = ("#04 " + e.toString() + "removal request for" + a.toString());
+		return new Request(e, a, 4, message);
 	}
+	
+	public Request requestFavor1(Employee e, Venue a){
+		String message = ("#05 " + e.toString() + " preference request for " + a.toString());
+		return new Request(e, a, 5, message);
+	}
+	public Request requestFavor2(Employee e, Venue a){
+		String message = ("#06 " + a.toString() + "preference request for" + e.toString());
+		return new Request(e, a, 6, message);
+	}
+	public Request requestBlacklist1(Employee e, Venue a){
+		String message = ("#07 " + e.toString() + " blacklist request against " + a.toString());
+		return new Request(e, a, 7, message);
+	}
+	public Request requestBlacklist2(Employee e, Venue a){
+		String message = ("#08 " + a.toString() + "blacklist request against" + e.toString());
+		return new Request(e, a, 8, message);
+	}
+	
 	public String dismissRequest(String request){
-		return "accept/reject";
+		return "request rejected";
+	}
+	public String approveRequest(Request r){
+		if (r.getId() == 1){
+			r.getA().removeEmployee(r.getE());
+		}
+		if (r.getId() == 2){
+			r.getE().blockTimes(r.getT());
+		}
+		if (r.getId() == 3){
+			r.getE().removeTimes(r.getT());
+		}
+		if (r.getId() == 4){
+			r.getE().addTimes(r.getT());
+		}
+		if (r.getId() == 5){
+			employeeFavorVenue(r.getE(), r.getV());
+		}
+		if (r.getId() == 6){
+			venueFavorEmployee(r.getE(), r.getV());
+		}
+		if (r.getId() == 7){
+			employeeBlacklistVenue(r.getE(), r.getV());
+		}if (r.getId() == 8){
+			venueBlacklistEmployee(r.getE(), r.getV());
+		}
+		return "request approved";
 	}
 }
