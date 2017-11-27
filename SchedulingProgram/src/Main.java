@@ -80,6 +80,8 @@ public class Main {
 	}
 	
 	
+	//Commands to blacklist, or increase the favor, between an employee and venue match.
+	
 	public void employeeBlacklistVenue(Employee e, Venue v){
 		Database.blacklist(e, v);
 	}
@@ -97,6 +99,8 @@ public class Main {
 		Database.favorplusone(e, v); 
 	
 	}
+	
+	//Calling constructors.
 	public Employee newEmployee(String f, String l, String i,
 			String p, String a, String ip, String E) {
 		Employee e = new Employee(f, l, i, p, a, ip, E);
@@ -113,6 +117,8 @@ public class Main {
 		return v;
 		
 	}
+	// When an employee creates a request for an absence for a day, a change
+	//in schedule, etc., a request form is sent to the manager for approval.
 
 	public Request requestAbsence(Employee e, Event a){
 		String message = ("#01 " + e.toString() + " absence request for " + a.toString());
@@ -151,9 +157,12 @@ public class Main {
 		return new Request(e, a, 8, message);
 	}
 	
+	
+	
 	public String dismissRequest(String request){
 		return "request rejected";
 	}
+	//If the request is approved, extract information from the request form to make the change.
 	public String approveRequest(Request r){
 		if (r.getId() == 1){
 			r.getA().removeEmployee(r.getE());
