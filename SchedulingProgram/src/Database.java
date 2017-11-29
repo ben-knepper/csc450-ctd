@@ -42,7 +42,7 @@ public final class Database
 				if (isManager)
 					employee = new Manager(id, firstName, lastName, password, phone, email);
 				else
-					employee = new Employee(id, firstName, lastName, password, null, phone, email);
+					employee = new Employee(firstName, lastName, id, phone, null, password, email);
 				employees.add(employee);
 			}
 		}

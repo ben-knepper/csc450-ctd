@@ -1,4 +1,5 @@
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -28,20 +29,21 @@ public class Viewer extends JFrame {
 		// FORM TITLE
 		super("Table Schedule View");
 		
-		Database db = new Database();
-		
-		try {
-			db.getEmployees();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		Time date = new Time();
 		JTable table, empInfoTable;
 		TableColumn columnModel;
 		// Table Data
 		
-
+		Database db = new Database();
+		ArrayList<Employee> empList = new ArrayList<Employee>();
+		try {
+			empList = db.getEmployees();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(empList.get(0).getFirstName() + " " + empList.get(0).getLastName() + " " + empList.get(0).getEmail()+ " " + empList.get(0).getPhone());
+		System.out.println(empList.get(0).getId());
 		int[] colLength = new int[date.getDaysInMonth()+1]; //Creates an int array equal to the length of days for the current month + 1 (So the value lines up with other column names that may be added.
 		ArrayList<String> colNames = new ArrayList<String>();// Test length for column titles
 		String[] employees = new String[colLength.length];
@@ -92,7 +94,6 @@ public class Viewer extends JFrame {
 
 		// SCROLLPANE,SET SZE,SET CLOSE OPERATION
 		JScrollPane pane = new JScrollPane(table);
-		
 
 		getContentPane().add(pane);
 		setSize(1000, 800);
@@ -152,7 +153,6 @@ class ButtonEditor extends DefaultCellEditor {
 
 		
 		empInfoTable = new JTable(empInfoRows, empColNames);
-
 
 		btn = new JButton();
 		btn.setOpaque(true);
