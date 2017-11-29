@@ -3,9 +3,13 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
-	ArrayList<TimeSlot> slots = new ArrayList<TimeSlot>();
-	ArrayList<Event> events = new ArrayList<Event>();
-	ArrayList<String> requests = new ArrayList<String>();
+	private ArrayList<TimeSlot> slots = new ArrayList<TimeSlot>();
+	private ArrayList<Event> eventsTemplate = new ArrayList<Event>(); // a list of *recurring* blank events
+	private ArrayList<Event> eventsTemp = eventsTemplate; // Object that exists for the population of events
+	
+	private ArrayList<Event> events = new ArrayList<Event>(); // actual events
+	private ArrayList<String> requests = new ArrayList<String>();
+	
 	
 
 	public static void main(String[] args) {
@@ -23,12 +27,14 @@ public class Main {
 		
 	}
 	
-	public void scheduleGenerator() {
-		//For all the events in a week, adds employees to each, taking priority into account.
-		Employee satisfied = null;
-		Employee saved = null; //First employee received from a higher priority.
-		// If no employee is found with a higher priority, employee is tested.
-		for (Event e: events) {
+	public void scheduleGenerator(){
+		/** For all the events in a week, adds employees to each, taking priority into account.     
+		If no employee is found with a higher priority, employee is tested.
+		*/ 
+		eventsTemp = eventsTemplate; //set a series of blank events
+		for (Event e: eventsTemp) {
+			Employee satisfied = null;
+			Employee saved = null; //First employee received from a higher priority.
 			TimeSlot[] eventTimes = e.getTimes();
 			while (satisfied == null){
 				satisfied = tryEmployee(e, eventTimes);
@@ -44,6 +50,7 @@ public class Main {
 				}
 			}
 			e.addEmployee(saved);
+			events.add(e);
 		} 
 	}
 	
