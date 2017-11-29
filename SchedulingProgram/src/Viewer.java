@@ -61,9 +61,8 @@ public class Viewer extends JFrame {
 		table.setAutoResizeMode(table.AUTO_RESIZE_OFF);
 
 		columnModel = table.getColumnModel().getColumn(0);
-		columnModel.setPreferredWidth(120);
+		columnModel.setPreferredWidth(180);
 		
-		columnModel.setPreferredWidth(120);
 
 		
 		for(int i = 1; i < colDays.length; i++){
