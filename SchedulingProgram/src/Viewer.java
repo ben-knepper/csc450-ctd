@@ -27,10 +27,21 @@ public class Viewer extends JFrame {
 	public Viewer() {
 		// FORM TITLE
 		super("Table Schedule View");
+		
+		Database db = new Database();
+		
+		try {
+			db.getEmployees();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Time date = new Time();
-		JTable table;
+		JTable table, empInfoTable;
 		TableColumn columnModel;
 		// Table Data
+		
+
 		int[] colLength = new int[date.getDaysInMonth()+1]; //Creates an int array equal to the length of days for the current month + 1 (So the value lines up with other column names that may be added.
 		ArrayList<String> colNames = new ArrayList<String>();// Test length for column titles
 		String[] employees = new String[colLength.length];
@@ -45,17 +56,25 @@ public class Viewer extends JFrame {
 			data[i][0] = employees[i];
 			for(int j = 1; j < colLength.length; j++){
 				data[i][j] = dayInfo[i];
+				
 			}
 
 		}
 		
+		
 		colNames.set(0, "Name");
 		table = new JTable(data, colNames.toArray());
+
 		
 		// Table resizing
 		table.setAutoResizeMode(table.AUTO_RESIZE_OFF);
+
 		columnModel = table.getColumnModel().getColumn(0);
 		columnModel.setPreferredWidth(120);
+		
+		columnModel.setPreferredWidth(120);
+
+		
 		for(int i = 1; i < colLength.length; i++){
 			table.setRowHeight(20);
 			columnModel = table.getColumnModel().getColumn(i);
@@ -73,6 +92,8 @@ public class Viewer extends JFrame {
 
 		// SCROLLPANE,SET SZE,SET CLOSE OPERATION
 		JScrollPane pane = new JScrollPane(table);
+		
+
 		getContentPane().add(pane);
 		setSize(1000, 800);
 
@@ -118,10 +139,20 @@ class ButtonEditor extends DefaultCellEditor {
 	protected JButton btn;
 	private String lbl;
 	private Boolean clicked;
-	JDialog infoBox = new JDialog();
+	JPanel empPanel;
+	Object [][] empInfoRows = {{"Joey Garcia","9196107512","jgarcia@gmail.com"}};
+	Object[] empColNames = {"Name","Phone Number","Email"};
+	JTable empInfoTable;
+	
+	
 
 	public ButtonEditor(JTextField txt) {
 		super(txt);
+		
+
+		
+		empInfoTable = new JTable(empInfoRows, empColNames);
+
 
 		btn = new JButton();
 		btn.setOpaque(true);
@@ -131,7 +162,7 @@ class ButtonEditor extends DefaultCellEditor {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable));
 				fireEditingStopped();
 			}
 		});
@@ -151,7 +182,7 @@ class ButtonEditor extends DefaultCellEditor {
 	@Override
 	public Object getCellEditorValue() {
 		if (clicked) {
-			JOptionPane.showMessageDialog(null,"Fix me");
+			//Fill with JTable emp info
 		}
 		// SET IT TO FALSE NOW THAT ITS CLICKED
 		clicked = false;

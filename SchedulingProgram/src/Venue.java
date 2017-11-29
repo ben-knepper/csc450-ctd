@@ -7,7 +7,7 @@ public class Venue {
 	private int tables;
 	private Dictionary<TimeSlot, String> times;
 
-public Venue(String id, String n, String a, int t) {
+public Venue(String id, String n, int t, String a) {
 	//constructor
 	ID = id;
 	name = n;

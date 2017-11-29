@@ -11,7 +11,16 @@ public class Employee {
 	private String email;
 	private boolean manager;
 	private Dictionary<TimeSlot, String> times;
-
+/**
+ * 
+ * @param f First name
+ * @param l Last name
+ * @param i Use ID
+ * @param p Phone Number
+ * @param a Address
+ * @param ip Password
+ * @param e Email
+ */
 public Employee(String f, String l, String i,
 		String p, String a, String ip, String e){
 	//constructor

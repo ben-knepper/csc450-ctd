@@ -42,7 +42,7 @@ public final class Database
 				if (isManager)
 					employee = new Manager(id, firstName, lastName, password, phone, email);
 				else
-					employee = new Employee(id, firstName, lastName, password, phone, email);
+					employee = new Employee(id, firstName, lastName, password, null, phone, email);
 				employees.add(employee);
 			}
 		}
@@ -162,7 +162,7 @@ public final class Database
 			String phone = resultSet.getString("phone");
 			String email = resultSet.getString("email");
 			
-			employee = new Employee(eID, fName, lName, password, phone, email);
+			employee = new Employee(eID, fName, lName, password, null, phone, email);
 		}
 		catch (Exception e) { throw e; }
 		finally
