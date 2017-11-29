@@ -1,7 +1,4 @@
 /*Drop tables*/
-drop table if exists availability;
-drop table if exists scheduled;
-drop table if exists venue_date_time;
 drop table if exists blacklisted;
 drop table if exists venue;
 drop table if exists employee;
@@ -34,44 +31,6 @@ create table blacklisted (
 		on delete cascade 
 		on update cascade,
 	foreign key(venueID) references venue(venueID)
-		on delete cascade
-		on update cascade
-);
-
-create table venue_date_time (
-	venueID varchar(10),
-	startDateTime datetime,
-	endDateTime datetime,
-	isOpen boolean,
-	primary key(venueID, startDateTime),
-	foreign key(venueID) references venue(venueID)
-		on delete cascade
-		on update cascade
-);
-
-create table scheduled (
-	employeeID varchar(10),
-	venueID varchar(10),
-	startDateTime datetime,
-	primary key(employeeID, venueID, startDateTime),
-	foreign key(employeeID) references employee(employeeID)
-		on delete cascade
-		on update cascade,
-	foreign key(venueID) references venue(venueID)
-		on delete cascade
-		on update cascade,
-	foreign key(startDateTime) references venue_date_time(startDateTime)
-		on delete cascade
-		on update cascade
-);
-
-create table availability (
-	employeeID varchar(10),
-	dayOfWeek varchar(10),
-	startTime time,
-	endTime time,
-	primary key(employeeID, dayOfWeek, startTime),
-	foreign key(employeeID) references employee(employeeID)
 		on delete cascade
 		on update cascade
 );

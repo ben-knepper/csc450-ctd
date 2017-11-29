@@ -4,20 +4,20 @@ import java.util.ArrayList;
 // based on www.vogella.com/tutorials/MySQLJava/article.html
 public final class Database
 {
-	private final String domain = "65.184.201.211";
-	private final String port = "3306";
-	private final String database_name = "csc450"; //"faf9072";
-	private final String sql_username = "ctd"; //"faf9072";
-	private final String sql_passwd = "eG*OSrpn4NZy"; //"xyreddf15";
+	private final static String domain = "65.184.201.211";
+	private final static String port = "3306";
+	private final static String database_name = "csc450"; //"faf9072";
+	private final static String sql_username = "ctd"; //"faf9072";
+	private final static String sql_passwd = "eG*OSrpn4NZy"; //"xyreddf15";
 	
-	private Connection connection;
-	private Statement statement;
-    private PreparedStatement preparedStatement;
-    private ResultSet resultSet;
-    private ArrayList<Employee> employees;
+	private static Connection connection;
+	private static Statement statement;
+    private static PreparedStatement preparedStatement;
+    private static ResultSet resultSet;
+    private static ArrayList<Employee> employees;
 	
     //Employee functions
-	public ArrayList<Employee> getEmployees() throws Exception
+	public static ArrayList<Employee> getEmployees() throws Exception
 	{
 		employees = new ArrayList<Employee>();
 		try
@@ -42,7 +42,7 @@ public final class Database
 				if (isManager)
 					employee = new Manager(id, firstName, lastName, password, phone, email);
 				else
-					employee = new Employee(id, firstName, lastName, password, null, phone, email);
+					employee = new Employee(id, firstName, lastName, password, phone, email);
 				employees.add(employee);
 			}
 		}
@@ -54,7 +54,7 @@ public final class Database
 		return employees;
 	}
 	
-	public String getEmployeeInfo(String fName, String lName, String column) throws Exception
+	public static String getEmployeeInfo(String fName, String lName, String column) throws Exception
 	{
 		String info = new String();
 		try
@@ -78,7 +78,7 @@ public final class Database
 		return info;
 	}
 	
-	public void addEmployee(String eID, String fName, String lName, String password, String phone, String email, Boolean isManager) throws Exception
+	public static void addEmployee(String eID, String fName, String lName, String password, String phone, String email, Boolean isManager) throws Exception
 	{
 		try
 		{
@@ -103,7 +103,7 @@ public final class Database
 		}
 	}
 	
-	public void updateEmployee(String column, String value, String ID) throws Exception
+	public static void updateEmployee(String column, String value, String ID) throws Exception
 	{
 		try
 		{
@@ -124,7 +124,7 @@ public final class Database
 		}
 	}
 	
-	public void updateManager(Boolean isMan, String eID) throws Exception
+	public static void updateManager(Boolean isMan, String eID) throws Exception
 	{
 		try
 		{
@@ -144,7 +144,7 @@ public final class Database
 		}
 	}
 	
-	public Employee searchEmployee(String fName, String lName) throws Exception
+	public static Employee searchEmployee(String fName, String lName) throws Exception
 	{
 		Employee employee;
 		try
@@ -162,7 +162,7 @@ public final class Database
 			String phone = resultSet.getString("phone");
 			String email = resultSet.getString("email");
 			
-			employee = new Employee(eID, fName, lName, password, null, phone, email);
+			employee = new Employee(eID, fName, lName, password, phone, email);
 		}
 		catch (Exception e) { throw e; }
 		finally
@@ -173,7 +173,7 @@ public final class Database
 	}
 	
 	//Venue functions
-	public ArrayList<Venue> getVenues() throws Exception
+	public static ArrayList<Venue> getVenues() throws Exception
 	{
 		ArrayList<Venue> venues = new ArrayList<Venue>();
 		try
@@ -203,7 +203,7 @@ public final class Database
 		return venues;
 	}
 	
-	public String getVenueInfo(String name, String column) throws Exception
+	public static String getVenueInfo(String name, String column) throws Exception
 	{
 		String info = new String();
 		try
@@ -226,7 +226,7 @@ public final class Database
 		return info;
 	}
 	
-	public void addVenue(String vID, String name, String tables, String address) throws Exception
+	public static void addVenue(String vID, String name, String tables, String address) throws Exception
 	{
 		try
 		{
@@ -248,7 +248,7 @@ public final class Database
 		}
 	}
 	
-	public void updateVenue(String column, String value, String ID) throws Exception
+	public static void updateVenue(String column, String value, String ID) throws Exception
 	{
 		try
 		{
@@ -269,7 +269,7 @@ public final class Database
 		}
 	}
 		
-	public Venue searchVenue(String name) throws Exception
+	public static Venue searchVenue(String name) throws Exception
 	{
 		Venue venue;
 		try
@@ -296,7 +296,7 @@ public final class Database
 	}
 	
 	//Blacklisted functions
-	public ArrayList<ArrayList<String>> getBlacklisted() throws Exception
+	public static ArrayList<ArrayList<String>> getBlacklisted() throws Exception
 	{
 		ArrayList<String> blacklist = new ArrayList<String>();
 		ArrayList<ArrayList<String>> blacklists = new ArrayList<ArrayList<String>>();
@@ -328,7 +328,7 @@ public final class Database
 		return blacklists;
 	}
 	
-	public void addBlacklisted(String eID, String vID) throws Exception
+	public static void addBlacklisted(String eID, String vID) throws Exception
 	{
 		try
 		{
@@ -348,7 +348,7 @@ public final class Database
 		}
 	}
 	
-	public ArrayList<String> searchBlacklistedEmployee(String eID) throws Exception
+	public static ArrayList<String> searchBlacklistedEmployee(String eID) throws Exception
 	{
 		ArrayList<String> blacklistedVenues = new ArrayList<String>();
 		try
@@ -376,7 +376,7 @@ public final class Database
 	}
 	
 	//Connection functions
-	private void connect() throws Exception
+	private static void connect() throws Exception
 	{
 		try
 		{
@@ -389,7 +389,7 @@ public final class Database
 		catch (Exception e) { throw e; }
 	}
 	
-	private void close()
+	private static void close()
 	{
 		try
 		{

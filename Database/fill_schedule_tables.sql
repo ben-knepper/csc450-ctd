@@ -18,7 +18,7 @@ insert into employee values("17064", "Sofia", "Kalabic", "password11", "pho-num-
 insert into employee values("17084", "Sara", "Olson", "password12", "pho-num-0012", "email12@domain.com", "0");
 insert into employee values("17088", "Gabriella", "Suren", "password13", "pho-num-0013", "email13@domain.com", "0");
 insert into employee values("17089", "Maximilian", "Salen", "password14", "pho-num-0014", "email14@domain.com", "0");
-insert into employee values("17089", "Daniella", "Yilmaz", "password15", "pho-num-0015", "email15@domain.com", "0");
+insert into employee values("17094", "Daniella", "Yilmaz", "password15", "pho-num-0015", "email15@domain.com", "0");
 insert into employee values("17100", "Disa", "Nilsson", "password16", "pho-num-0016", "email16@domain.com", "0");
 insert into employee values("170104", "Emma", "Blomqvist", "password17", "pho-num-0017", "email17@domain.com", "0");
 insert into employee values("17108", "Jonna", "Grevle", "password18", "pho-num-0018", "email18@domain.com", "0");
