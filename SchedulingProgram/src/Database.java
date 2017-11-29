@@ -25,7 +25,7 @@ public final class Database
 			connect();
 			
 			preparedStatement = connection.prepareStatement(
-					"call GetTable(employee);");
+					"select * from employee;");
 			resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next())

@@ -1,4 +1,5 @@
 import java.util.Dictionary;
+import java.util.Hashtable;
 //Object containing an Employee's scheduling and contact information.
 
 public class Employee {
@@ -37,6 +38,7 @@ public Employee(String f, String l, String i,
 
 public Dictionary<TimeSlot, String> buildTimeSlots(){
 	//creates a dictionary of time slots, each of which contains a "yes" or "no" value.
+	times = new Hashtable<TimeSlot, String>();
 	for (int h = 0; h < 168; h++){
 		times.put(new TimeSlot(h), "n");
 	}
