@@ -48,7 +48,7 @@ public class Viewer extends JFrame {
 		
 		// Sets data in each of the data Object's cells
 		for (int i = 0; i < empList.size(); i++) {
-			data[i][0] = empList.get(i).getFirstName()+ " " + empList.get(i).getLastName();
+			data[i][0] = empList.get(i); //empList.get(i).getFirstName()+ " " + empList.get(i).getLastName();
 
 		}
 		
@@ -78,7 +78,8 @@ public class Viewer extends JFrame {
 
 
 		// SET CUSTOM EDITOR TO TEAMS COLUMN
-		table.getColumnModel().getColumn(0).setCellEditor(new ButtonEditor(new JTextField()));
+		table.getColumnModel().getColumn(0).setCellEditor(
+				new ButtonEditor(new JTextField()));
 
 		// SCROLLPANE,SET SZE,SET CLOSE OPERATION
 		JScrollPane pane = new JScrollPane(table);
@@ -112,7 +113,8 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
 			int col) {
 
 		// SET PASSED OBJECT AS BUTTON TEXT
-		setText((obj == null) ? "" : obj.toString());
+		Employee employee = (Employee)obj;
+		setText((employee == null) ? "" : employee.getFullName());
 
 		return this;
 	}
@@ -128,8 +130,7 @@ class ButtonEditor extends DefaultCellEditor {
 	protected JButton btn;
 	private String lbl;
 	private Boolean clicked;
-	JPanel empPanel;
-	Object [][] empInfoRows = {{"Joey Garcia","9196107512","jgarcia@gmail.com"}};
+	Object [][] empInfoRows;
 	Object[] empColNames = {"Name","Phone Number","Email"};
 	JTable empInfoTable;
 	
@@ -137,13 +138,24 @@ class ButtonEditor extends DefaultCellEditor {
 
 	public ButtonEditor(JTextField txt) {
 		super(txt);
-		
 
-		
-		empInfoTable = new JTable(empInfoRows, empColNames);
-
-		btn = new JButton();
+		btn = new JButton(txt.getText());
 		btn.setOpaque(true);
+	}
+
+	// OVERRIDE A COUPLE OF METHODS
+	@Override
+	public Component getTableCellEditorComponent(JTable table, Object obj, boolean selected, int row, int col) {
+		
+		// SET TEXT TO BUTTON,SET CLICKED TO TRUE,THEN RETURN THE BTN OBJECT
+		Employee employee = (Employee)obj;
+		lbl = ((employee == null) ? "" : employee.getFullName());
+		//lbl = (obj == null) ? "" : obj.toString();
+		btn.setText(lbl);
+		clicked = true;
+		
+		Object [][] empInfoRows = {{employee.getFullName(),employee.getPhone(),employee.getEmail()}};
+		empInfoTable = new JTable(empInfoRows, empColNames);
 
 		// WHEN BUTTON IS CLICKED
 		btn.addActionListener(new ActionListener() {
@@ -154,28 +166,20 @@ class ButtonEditor extends DefaultCellEditor {
 				fireEditingStopped();
 			}
 		});
-	}
-
-	// OVERRIDE A COUPLE OF METHODS
-	@Override
-	public Component getTableCellEditorComponent(JTable table, Object obj, boolean selected, int row, int col) {
-		// SET TEXT TO BUTTON,SET CLICKED TO TRUE,THEN RETURN THE BTN OBJECT
-		lbl = (obj == null) ? "" : obj.toString();
-		btn.setText(lbl);
-		clicked = true;
+		
 		return btn;
 	}
 
-	// IF BUTTON CELL VALUE CHNAGES,IF CLICKED THAT IS
-	@Override
-	public Object getCellEditorValue() {
-		if (clicked) {
-			//Fill with JTable emp info
-		}
-		// SET IT TO FALSE NOW THAT ITS CLICKED
-		clicked = false;
-		return new String(lbl);
-	}
+//	// IF BUTTON CELL VALUE CHNAGES,IF CLICKED THAT IS
+//	@Override
+//	public Object getCellEditorValue() {
+//		if (clicked) {
+//			//Fill with JTable emp info
+//		}
+//		// SET IT TO FALSE NOW THAT ITS CLICKED
+//		clicked = false;
+//		return super.getCellEditorValue();
+//	}
 
 	@Override
 	public boolean stopCellEditing() {

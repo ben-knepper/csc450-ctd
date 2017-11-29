@@ -74,6 +74,10 @@ public class Employee {
 		this.lastName = lastName;
 	}
 	
+	public String getFullName() {
+		return this.firstName + " " + this.lastName;
+	}
+	
 	public String getPhone() {
 		return phone;
 	}
@@ -123,6 +127,6 @@ public class Employee {
 	}
 	
 	public String toString() {
-		return(this.firstName + " " + this.lastName + " " + id);
+		return getFullName();
 	}
 }
