@@ -150,7 +150,6 @@ class ButtonEditor extends DefaultCellEditor {
 		// SET TEXT TO BUTTON,SET CLICKED TO TRUE,THEN RETURN THE BTN OBJECT
 		Employee employee = (Employee)obj;
 		lbl = (employee == null) ? "" : employee.getFullName();
-		//lbl = (obj == null) ? "" : obj.toString();
 		btn.setText(lbl);
 		clicked = true;
 
@@ -166,7 +165,6 @@ class ButtonEditor extends DefaultCellEditor {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable));
-				//fireEditingStopped();
 			}
 		});
 
@@ -194,6 +192,6 @@ class ButtonEditor extends DefaultCellEditor {
 	@Override
 	protected void fireEditingStopped() {
 		// TODO Auto-generated method stub
-		//super.fireEditingStopped();
+		// DON'T
 	}
 }
