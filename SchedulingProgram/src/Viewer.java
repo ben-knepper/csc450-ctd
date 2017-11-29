@@ -42,30 +42,19 @@ public class Viewer extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(empList.get(0).getFirstName() + " " + empList.get(0).getLastName() + " " + empList.get(0).getEmail()+ " " + empList.get(0).getPhone());
-		System.out.println(empList.get(0).getId());
-		int[] colLength = new int[date.getDaysInMonth()+1]; //Creates an int array equal to the length of days for the current month + 1 (So the value lines up with other column names that may be added.
-		ArrayList<String> colNames = new ArrayList<String>();// Test length for column titles
-		String[] employees = new String[colLength.length];
-		String[] dayInfo = new String[colLength.length];
-		Object[][] data = new Object[employees.length][colLength.length]; // Initializes data array to employee length as rows and colNames length as columns
+		System.out.println(empList.size());
+		Object[] colDays = {"Name","Sunday", "Monday", "Tuesday","Wednesday","Thursday","Friday","Saturday"};
+		Object[][] data = new Object[empList.size()][colDays.length]; // Initializes data array to employee length as rows and colNames length as columns
 		
 		// Sets data in each of the data Object's cells
-		for (int i = 0; i < colLength.length; i++) {
-			colNames.add(Integer.toString(i));
-			employees[i] = ("Employee " + i);
-			dayInfo[i] = ("Venue " + i);
-			data[i][0] = employees[i];
-			for(int j = 1; j < colLength.length; j++){
-				data[i][j] = dayInfo[i];
-				
-			}
+		for (int i = 0; i < empList.size(); i++) {
+			data[i][0] = empList.get(i).getFirstName()+ " " + empList.get(i).getLastName();
 
 		}
 		
 		
-		colNames.set(0, "Name");
-		table = new JTable(data, colNames.toArray());
+
+		table = new JTable(data, colDays);
 
 		
 		// Table resizing
@@ -77,7 +66,7 @@ public class Viewer extends JFrame {
 		columnModel.setPreferredWidth(120);
 
 		
-		for(int i = 1; i < colLength.length; i++){
+		for(int i = 1; i < colDays.length; i++){
 			table.setRowHeight(20);
 			columnModel = table.getColumnModel().getColumn(i);
 			columnModel.setPreferredWidth(60);
