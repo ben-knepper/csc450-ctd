@@ -129,7 +129,7 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
 class ButtonEditor extends DefaultCellEditor {
 	protected JButton btn;
 	private String lbl;
-	private Boolean clicked;
+	private boolean clicked;
 	Object [][] empInfoRows;
 	Object[] empColNames = {"Name","Phone Number","Email"};
 	JTable empInfoTable;
@@ -149,37 +149,40 @@ class ButtonEditor extends DefaultCellEditor {
 		
 		// SET TEXT TO BUTTON,SET CLICKED TO TRUE,THEN RETURN THE BTN OBJECT
 		Employee employee = (Employee)obj;
-		lbl = ((employee == null) ? "" : employee.getFullName());
+		lbl = (employee == null) ? "" : employee.getFullName();
 		//lbl = (obj == null) ? "" : obj.toString();
 		btn.setText(lbl);
 		clicked = true;
+
+		// WHEN BUTTON IS CLICKED
+		for (ActionListener al : btn.getActionListeners())
+			btn.removeActionListener(al);
 		
 		Object [][] empInfoRows = {{employee.getFullName(),employee.getPhone(),employee.getEmail()}};
 		empInfoTable = new JTable(empInfoRows, empColNames);
-
-		// WHEN BUTTON IS CLICKED
+		
 		btn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable));
-				fireEditingStopped();
+				//fireEditingStopped();
 			}
 		});
-		
+
 		return btn;
 	}
 
-//	// IF BUTTON CELL VALUE CHNAGES,IF CLICKED THAT IS
-//	@Override
-//	public Object getCellEditorValue() {
-//		if (clicked) {
-//			//Fill with JTable emp info
-//		}
-//		// SET IT TO FALSE NOW THAT ITS CLICKED
-//		clicked = false;
-//		return super.getCellEditorValue();
-//	}
+	// IF BUTTON CELL VALUE CHNAGES,IF CLICKED THAT IS
+	@Override
+	public Object getCellEditorValue() {
+		if (clicked) {
+			//Fill with JTable emp info
+		}
+		// SET IT TO FALSE NOW THAT ITS CLICKED
+		clicked = false;
+		return super.getCellEditorValue();
+	}
 
 	@Override
 	public boolean stopCellEditing() {
@@ -191,6 +194,6 @@ class ButtonEditor extends DefaultCellEditor {
 	@Override
 	protected void fireEditingStopped() {
 		// TODO Auto-generated method stub
-		super.fireEditingStopped();
+		//super.fireEditingStopped();
 	}
 }

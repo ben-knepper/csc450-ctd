@@ -39,10 +39,10 @@ public final class Database
 				boolean isManager = resultSet.getBoolean("isManager");
 				
 				Employee employee;
-				if (isManager)
-					employee = new Manager(id, firstName, lastName, password, phone, email);
-				else
-					employee = new Employee(id, firstName, lastName, phone, password, email);
+//				if (isManager)
+//					employee = new Manager(id, firstName, lastName, password, phone, email);
+//				else
+					employee = new Employee(id, firstName, lastName, password, phone, email);
 				employees.add(employee);
 			}
 		}
