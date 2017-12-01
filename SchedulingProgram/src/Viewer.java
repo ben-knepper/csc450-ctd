@@ -199,10 +199,16 @@ public class Viewer extends JFrame implements ActionListener{
 
 
 		// Actions for File Menu Items
+
 //		if(menuItem.getSource().equals(saveFile)){
 //			saveLocation = new String("");
 //			SaveSchedule(table,);
 //		}
+//		if(menuItem.getSource().equals(saveFile)){
+//			saveLocation = new String("")
+//			SaveSchedule(table,);
+//		}
+
 		// Actions for Employee Menu Items
 		// Add way to parse entered data and feed into the respective database functions.
 		if(menuItem.getSource().equals(searchEmployee)){
