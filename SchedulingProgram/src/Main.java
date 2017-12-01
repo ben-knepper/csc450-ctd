@@ -1,7 +1,12 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-
+import java.util.Dictionary;
+/** If you can read this, you're too close.
+ * 
+ * @author gsmbagels
+ *
+ */
 public class Main {
 	private ArrayList<TimeSlot> slots = new ArrayList<TimeSlot>();
 	private ArrayList<Event> eventsTemplate = new ArrayList<Event>(); // a list of *recurring* blank events
@@ -10,10 +15,10 @@ public class Main {
 	private ArrayList<Event> events = new ArrayList<Event>(); // actual events
 	private ArrayList<String> requests = new ArrayList<String>();
 	
-	
 
 	public static void main(String[] args) {
 		Database db = new Database();
+
 		ArrayList<Employee> employees = new ArrayList<Employee>();
 		
 		try {
@@ -24,15 +29,12 @@ public class Main {
 		}
 		
 		Main test = new Main();
-		test.scheduleGenerator();
-		
+test.scheduleGenerator();
 	}
-	
 	public void scheduleGenerator(){
 		/** For all the events in a week, adds employees to each, taking priority into account.     
 		If no employee is found with a higher priority, employee is tested.
 		*/ 
-
 		eventsTemp = eventsTemplate; //set a series of blank events
 		for (Event e: eventsTemp) {
 			Employee satisfied = null;
@@ -53,27 +55,25 @@ public class Main {
 			}
 			e.addEmployee(saved);
 			events.add(e);
-			for(int i = 0; i<events.size();i++){
-				System.out.println(events.get(i).getTimes());
-			}
 		} 
 	}
-	
-	public boolean scheduleCompatible(TimeSlot[] empTimes, TimeSlot[] eventTimes) {
-		//Given the times of an event and an employee, tests to see if they are compatible.
+	public boolean scheduleCompatible(Dictionary<TimeSlot, String> empTimes, TimeSlot[] eventTimes){
+		/** Given the times of an event and an employee, tests to see if they are compatible.
+		* @param empTimes Dictionary containing employee times.
+		*/
 		for (TimeSlot t: eventTimes){
-			boolean r = Arrays.asList(empTimes).contains(t);
-			if (r == false){
+			if(empTimes.get(t) == "n") {
 				return false;
 			}
 		}
 		return true;
 	}
-	
-	public Employee tryEmployee(Event e, TimeSlot[] eventTimes) {
-		//Tries to add an employee to an event.
-		Employee tempEmployee = null; //gets a random employee from the database
-		TimeSlot[] empTimes = tempEmployee.getTimes();
+	public Employee tryEmployee(Event e, TimeSlot[] eventTimes){
+		/**Tries to add an employee to an event.
+		 * 
+		 */
+		Employee tempEmployee = employees.get(randomizer.nextInt(employees.size())); //gets a random employee from the database 
+		Dictionary<TimeSlot, String> empTimes = tempEmployee.getTimes();
 		if (scheduleCompatible(empTimes, eventTimes)){
 			return tempEmployee;
 		} else {
@@ -82,11 +82,29 @@ public class Main {
 		
 	}
 	
-	public void addEmployeeToEvent(Employee e, Event a) {
+	public void createRecurringEvent(Venue v, int startTime, int endTime, int employeeNum){
+		/**
+		 * Creates a template for an event that repeats every week.
+		 */
+		TimeSlot[] eventTimes = new TimeSlot[endTime - startTime];
+		for (int hour = startTime; hour < endTime; hour++){
+			eventTimes[hour - startTime] = new TimeSlot(hour);
+		}
+		Event e = new Event(v, eventTimes, employeeNum);
+		eventsTemplate.add(e);
+	}
+	
+	public void addEmployeeToEvent(Employee e, Event a){
+		/**Adds an employee to an event, assuming the employee's schedule is compatible.
+		*
+		*/
 		a.addEmployee(e);
 	}
 	
-	public void swapEventEmployees(Employee e1, Employee e2, Event a1, Event a2) {
+	public void swapEventEmployees(Employee e1, Employee e2, Event a1, Event a2){
+		/**Swaps two employees, assuming the employees have mutually agreed to trade events.
+		*
+		*/
 		a1.removeEmployee(e1);
 		a2.removeEmployee(e2);
 		a1.addEmployee(e2);
@@ -94,6 +112,7 @@ public class Main {
 	}
 	
 	//Commands to blacklist, or increase the favor, between an employee and venue match.
+	
 	public void employeeBlacklistVenue(Employee e, Venue v) {
 		try {
 			Database.addBlacklisted(e.getId(), v.getID());
@@ -118,78 +137,72 @@ public class Main {
 	
 	public void venueFavorEmployee(Employee e, Venue v) {
 		Database.favorplusone(e, v); 
-	}
+}
 	
 	//Calling constructors.
-	public Employee newEmployee(String i, String f, String l,
-			String ip, String p, String E) {
-		Employee e = new Employee(i, f, l, ip, p, E);
+	public Employee newEmployee(String f, String l, String i,
+			String p, String a, String ip, String E) {
+		Employee e = new Employee(f, l, i, p, a, ip, E);
 		return e;
 	}
-	
-	public Employee newManager(String i, String f, String l,
-			String ip, String p, String E) {
-		Employee m = new Employee(i, f, l, ip, p, E);
+	public Employee newManager(String f, String l, String i,
+			String p, String a, String ip, String E) {
+		Employee m = new Employee(f, l, i, p, a, ip, E);
 		m.setManager(true);
 		return m;
 	}
-	
-	public Venue newVenue(String id, String n, int t, String a) {
-		Venue v = new Venue(id, n, t, a);
+	public Venue newVenue(String id, String n, String a, int t) {
+		Venue v = new Venue(id, n, a, t);
 		return v;
+		
 	}
-	
 	// When an employee creates a request for an absence for a day, a change
 	//in schedule, etc., a request form is sent to the manager for approval.
-	public Request requestAbsence(Employee e, Event a) {
+
+	public Request requestAbsence(Employee e, Event a){
 		String message = ("#01 " + e.toString() + " absence request for " + a.toString());
 		return new Request(e, a, 1, message);
 	}
-	
-	public Request requestAbsence(Employee e, TimeSlot a) {
+	public Request requestAbsence(Employee e, TimeSlot a){
 		//returns an "absence request form" of type string
 		String message = ("#02 " + e.toString() + "absence request for" + a.toString());
 		return new Request(e, a, 2, message);
 	}
-	
-	public Request addTimeslot(Employee e, Event a) {
+	public Request addTimeslot(Employee e, Event a){
 		//check the database to determine functionality
 		String message = ("#03 " + e.toString() + "has new timeslot" + a.toString());
 		return new Request(e, a, 3, message);
 	}
-	
-	public Request removeTimeslot(Employee e, TimeSlot a) {
+	public Request removeTimeslot(Employee e, TimeSlot a){
 		//check the database to determine functionality
 		String message = ("#04 " + e.toString() + "removal request for" + a.toString());
 		return new Request(e, a, 4, message);
 	}
 	
-	public Request requestFavor1(Employee e, Venue a) {
+	public Request requestFavor1(Employee e, Venue a){
 		String message = ("#05 " + e.toString() + " preference request for " + a.toString());
 		return new Request(e, a, 5, message);
 	}
-	
-	public Request requestFavor2(Employee e, Venue a) {
+	public Request requestFavor2(Employee e, Venue a){
 		String message = ("#06 " + a.toString() + "preference request for" + e.toString());
 		return new Request(e, a, 6, message);
 	}
-	
-	public Request requestBlacklist1(Employee e, Venue a) {
+	public Request requestBlacklist1(Employee e, Venue a){
 		String message = ("#07 " + e.toString() + " blacklist request against " + a.toString());
 		return new Request(e, a, 7, message);
 	}
-	
-	public Request requestBlacklist2(Employee e, Venue a) {
+	public Request requestBlacklist2(Employee e, Venue a){
 		String message = ("#08 " + a.toString() + "blacklist request against" + e.toString());
 		return new Request(e, a, 8, message);
 	}
 	
-	public String dismissRequest(String request) {
+	
+	
+	public String dismissRequest(String request){
 		return "request rejected";
 	}
-	
 	//If the request is approved, extract information from the request form to make the change.
-	public String approveRequest(Request r) {
+	public String approveRequest(Request r){
 		if (r.getId() == 1){
 			r.getA().removeEmployee(r.getE());
 		}
