@@ -33,13 +33,14 @@ public class Event {
 		//remove one employee and descend the array
 		found = false;
 		for (int j = 0; j < tableSize; j++) {
-			for (int j = 0; j < tables; j++) {
-			if (found){
-				employees[j-1] = employees[j];
-			}else{
-				if (employees[j] == e){
-					found = true;
-					current--;
+			for (int j1 = 0; j1 < tables; j1++) {
+				if (found){
+					employees[j1-1] = employees[j1];
+				}else{
+					if (employees[j1] == e){
+						found = true;
+						current--;
+					}
 				}
 			}
 		}
