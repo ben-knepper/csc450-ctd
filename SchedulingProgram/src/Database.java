@@ -172,6 +172,53 @@ public final class Database
 		return employee;
 	}
 	
+	public static Employee searchEmployeeID(String eID) throws Exception
+	{
+		Employee employee;
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call SearchEmployeeID(?);");
+			preparedStatement.setString(1, eID);
+			resultSet = preparedStatement.executeQuery();
+			
+			String fName = resultSet.getString("fName");
+			String lName = resultSet.getString("lName");
+			String password = resultSet.getString("password");
+			String phone = resultSet.getString("phone");
+			String email = resultSet.getString("email");
+			
+			employee = new Employee(eID, fName, lName, password, phone, email);
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+		return employee;
+	}
+	
+	public static void removeEmployee(String eID) throws Exception	
+	{
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call RemoveEmployee(?)");
+			preparedStatement.setString(1, eID);
+			
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+	}
+		
 	//Venue functions
 	public static ArrayList<Venue> getVenues() throws Exception
 	{
@@ -295,6 +342,51 @@ public final class Database
 		return venue;
 	}
 	
+	public static Venue searchVenueID(String vID) throws Exception
+	{
+		Venue venue;
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call SearchVenueID(?)");
+			preparedStatement.setString(1, vID);
+			resultSet = preparedStatement.executeQuery();
+			
+			String name = resultSet.getString("name");
+			int tables = resultSet.getInt("tableNum");
+			String address = resultSet.getString("address");
+			
+			venue = new Venue(vID, name, tables, address);
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+		return venue;
+	}
+
+	public static void removeVenue(String vID) throws Exception	
+	{
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call RemoveVenue(?)");
+			preparedStatement.setString(1, vID);
+			
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+	}
+	
 	//Blacklisted functions
 	public static ArrayList<ArrayList<String>> getBlacklisted() throws Exception
 	{
@@ -373,6 +465,53 @@ public final class Database
 			close();
 		}
 		return blacklistedVenues;
+	}
+	
+	public static ArrayList<String> searchBlacklistedVenue(String vID) throws Exception
+	{
+		ArrayList<String> blacklistedEmployees = new ArrayList<String>();
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call SearchBlacklistedVenue(?)");
+			preparedStatement.setString(1, vID);
+			resultSet = preparedStatement.executeQuery();
+			
+			while (resultSet.next())
+			{
+				String eID = resultSet.getString("employeeID");
+				
+				blacklistedEmployees.add(vID);
+			}
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
+		return blacklistedEmployees;
+	}
+	
+	public static void removeBlacklisted(String eID, String vID) throws Exception	
+	{
+		try
+		{
+			connect();
+			
+			preparedStatement = connection.prepareStatement(
+					"call RemoveBlacklisted(?, ?)");
+			preparedStatement.setString(1, eID);
+			preparedStatement.setString(2, vID);
+			
+			preparedStatement.executeUpdate();
+		}
+		catch (Exception e) { throw e; }
+		finally
+		{
+			close();
+		}
 	}
 	
 	//Connection functions

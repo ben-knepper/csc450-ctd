@@ -5,15 +5,20 @@ drop procedure if exists AddEmployee;
 drop procedure if exists UpdateEmployee;
 drop procedure if exists UpdateManager;
 drop procedure if exists SearchEmployee;
+drop procedure if exists SearchEmployeeID;
+drop procedure if exists RemoveEmployee;
 
 drop procedure if exists GetVenueInfo;
 drop procedure if exists AddVenue;
 drop procedure if exists UpdateVenue;
 drop procedure if exists SearchVenue;
+drop procedure if exists SearchVenueID;
+drop procedure if exists RemoveVenue;
 
 drop procedure if exists AddBlacklisted;
 drop procedure if exists SearchBlacklistedEmployee;
 drop procedure if exists SearchBlacklistedVenue;
+drop procedure if exists RemoveBlacklisted;
 
 delimiter //
 
@@ -81,6 +86,22 @@ begin
 		and l_name = lName;
 end//
 
+create procedure SearchEmployeeID(
+	in eID varchar(10)
+)
+begin
+	select * from employee
+		where employeeID = eID;
+end//
+
+create procedure RemoveEmployee(
+	in eID varchar(10)
+)
+begin
+	delete from employee
+		where employeeID = eID;
+end//
+
 /*Venue Procedures*/
 create procedure GetVenueInfo(
 	in v_name varchar(10),
@@ -122,6 +143,22 @@ begin
 		where v_name = name;
 end//
 
+create procedure SearchVenueID(
+	in vID varchar(20)
+)
+begin
+	select * from venue
+		where venueID = vID;
+end//
+
+create procedure RemoveVenue(
+	in vID varchar(10)
+)
+begin
+	delete from venue
+		where venueID = vID;
+end//
+
 /*Blacklisted Procedures*/
 create procedure AddBlacklisted(
 	in e_id varchar(10),
@@ -147,6 +184,16 @@ create procedure SearchBlacklistedVenue(
 begin
 	select employeeID from blacklisted
 		where v_id = venueID;
+end//
+
+create procedure RemoveBlacklisted(
+	in eID varchar(10),
+    in vID varchar(10)
+)
+begin
+	delete from blacklist
+		where employeeID = eID
+        and venueID = vID;
 end//
 
 delimiter ;
