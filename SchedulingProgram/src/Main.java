@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.Random;
 import java.util.Dictionary;
-/** If you can read this, you're too close.
- * 
+/** The main logic of the scheduling program.
+ * Contains the automated schedule generator, local copies of information in the database,
+ * Blacklisting and favor management, and request sends/management,
+ * in addition to basic commands sent to other classes.
  * @author gsmbagels
  *
  */
@@ -11,13 +14,8 @@ public class Main {
 	private ArrayList<TimeSlot> slots = new ArrayList<TimeSlot>();
 	private static ArrayList<Event> events = new ArrayList<Event>(); // actual events
 	private static ArrayList<Event> setEvents = new ArrayList<Event>(); // actual events
-
-	
-	
 	private ArrayList<String> requests = new ArrayList<String>();
-
 	private static ArrayList<Employee> employees = new ArrayList<Employee>();
-
 	private static ArrayList<Venue> venues = new ArrayList<Venue>();
 	
 
@@ -29,7 +27,6 @@ public class Main {
 		
 		Database db = new Database();
 		try {
-			employees = Database.getEmployees();
 			employees = db.getEmployees();
 
 			venues = db.getVenues();
@@ -44,20 +41,19 @@ public class Main {
 		}
 		
 		Main test = new Main();
-		test.scheduleGenerator();
+test.scheduleGenerator();
 	}
 	public void scheduleGenerator(){
-		/** For all the events in a week, adds employees to each, taking priority into account.     
-		If no employee is found with a higher priority, employee is tested.
+		/** Generates one day's worth of scheduling, adding employees to all events.
 		*/ 
 		
 
-		
-	
+
 		ArrayList<Employee> availableEmps = new ArrayList<Employee>();
 		for (Event e: events){
-			for (int table = 0; table < e.getTables(); e++){
+			for (int table = 0; table < e.getTables(); table++){
 			Employee saved = availableEmps.get(randomizer.nextInt(availableEmps.size())); //first employee
+			
 			e.addEmployee(saved);
 			setEvents.add(e);
 			availableEmps.remove(saved);
@@ -98,7 +94,9 @@ public class Main {
 
 	
 	public Employee tryEmployee(Event e, TimeSlot[] eventTimes) {
-		//Tries to add an employee to an event.
+		/**Tries to add an employee to an event.
+		 * 
+		 */
 		//Unused.
 		Employee tempEmployee = employees.get(randomizer.nextInt(employees.size())); //gets a random employee from the database 
 		Dictionary<TimeSlot, String> empTimes = tempEmployee.getTimes();
@@ -142,6 +140,9 @@ public class Main {
 	//Commands to blacklist, or increase the favor, between an employee and venue match.
 	
 	public void employeeBlacklistVenue(Employee e, Venue v) {
+		/**
+		 * Adds a blacklist mark between an employee and a venue, preventing matching.
+		 */
 		try {
 			Database.addBlacklisted(e.getId(), v.getID());
 		} catch (Exception e1) {
@@ -155,6 +156,9 @@ public class Main {
 	}
 
 	public void venueBlacklistEmployee(Employee e, Venue v) {
+		/**
+		 * Adds a blacklist mark between an employee and a venue, preventing matching.
+		 */
 		try {
 			Database.addBlacklisted(e.getId(), v.getID());
 		} catch (Exception e1) {
@@ -189,38 +193,67 @@ public class Main {
 	//in schedule, etc., a request form is sent to the manager for approval.
 
 	public Request requestAbsence(Employee e, Event a){
+		/**
+		 * Sends a request to be absent from an event.
+		 */
 		String message = ("#01 " + e.toString() + " absence request for " + a.toString());
 		return new Request(e, a, 1, message);
 	}
 	public Request requestAbsence(Employee e, TimeSlot a){
-		//returns an "absence request form" of type string
+		/**
+		 * Sends a request to be absent from an particular time slot.
+		 * Unused.
+		 */
 		String message = ("#02 " + e.toString() + "absence request for" + a.toString());
 		return new Request(e, a, 2, message);
 	}
 	public Request addTimeslot(Employee e, Event a){
-		//check the database to determine functionality
+		/**
+		 * Sends a request to add a time slot.
+		 * Unused.
+		 */
 		String message = ("#03 " + e.toString() + "has new timeslot" + a.toString());
 		return new Request(e, a, 3, message);
 	}
 	public Request removeTimeslot(Employee e, TimeSlot a){
-		//check the database to determine functionality
+
+		/**
+		 * Sends a request to remove a time slot.
+		 * Unused.
+		 */
 		String message = ("#04 " + e.toString() + "removal request for" + a.toString());
 		return new Request(e, a, 4, message);
 	}
 	
 	public Request requestFavor1(Employee e, Venue a){
+
+		/**
+		 * Sends a request to increase favor between an employee and venue.
+		 */
 		String message = ("#05 " + e.toString() + " preference request for " + a.toString());
 		return new Request(e, a, 5, message);
 	}
 	public Request requestFavor2(Employee e, Venue a){
+
+		/**
+		 * Sends a request to increase favor between an employee and venue.
+		 */
 		String message = ("#06 " + a.toString() + "preference request for" + e.toString());
 		return new Request(e, a, 6, message);
 	}
 	public Request requestBlacklist1(Employee e, Venue a){
+
+		/**
+		 * Requests a blacklisting mark between and employee and a venue.
+		 */
 		String message = ("#07 " + e.toString() + " blacklist request against " + a.toString());
 		return new Request(e, a, 7, message);
 	}
 	public Request requestBlacklist2(Employee e, Venue a){
+
+		/**
+		 * Requests a blacklisting mark between and employee and a venue.
+		 */
 		String message = ("#08 " + a.toString() + "blacklist request against" + e.toString());
 		return new Request(e, a, 8, message);
 	}
@@ -228,10 +261,15 @@ public class Main {
 	
 	
 	public String dismissRequest(String request){
+		/**
+		 * If a request is rejected, return a message saying so to the employee.
+		 */
+		
 		return "request rejected";
 	}
-	//If the request is approved, extract information from the request form to make the change.
 	public String approveRequest(Request r){
+		/**If the request is approved, extract information from the request form to make the change.
+		*/
 		if (r.getId() == 1){
 			r.getA().removeEmployee(r.getE());
 		}
