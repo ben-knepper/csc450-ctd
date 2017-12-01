@@ -4,7 +4,7 @@ public class Event {
 	private TimeSlot[] timeslot;
 	private Employee[] employees; //assuming a small number (<10)
 	private int current;
-	private int employeeMax;
+	private int tables;
 	private boolean found;
 	
 	
@@ -13,7 +13,14 @@ public class Event {
 		timeslot = slots;
 		employees = new Employee[spots];
 		current = 0;
-		employeeMax = spots;
+		tables = spots;
+	}
+	
+	public Event(Venue v, int spots) {
+		venue = v;
+		employees = new Employee[spots];
+		current = 0;
+		tables = spots;
 	}
 
 	public void addEmployee(Employee e) {
@@ -25,7 +32,7 @@ public class Event {
 	public void removeEmployee(Employee e) {
 		//remove one employee and descend the array
 		found = false;
-		for (int j = 0; j < employeeMax; j++) {
+		for (int j = 0; j < tables; j++) {
 			if (found){
 				employees[j-1] = employees[j];
 			}else{
@@ -39,9 +46,17 @@ public class Event {
 		
 	public void clearEmployees() {
 		//Java collects garbage automatically, right?
-		employees = new Employee[employeeMax];
+		employees = new Employee[tables];
 	}
 	
+	public int getTables() {
+		return tables;
+	}
+
+	public void setTables(int tables) {
+		this.tables = tables;
+	}
+
 	public String toString() {
 		return("Event " + timeslot.toString() + " at " + venue);	
 	}
