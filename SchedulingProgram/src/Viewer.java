@@ -29,20 +29,25 @@ public class Viewer extends JFrame implements ActionListener{
 	private static JMenuItem 	
 	addEmployee, removeEmployee, updateEmployee, searchEmployee,
 	addVenue, removeVenue, updateVenue, searchVenue,
+	saveFile,
 	addBlacklisted, searchBlacklistedEmployee;
+	static JTable table;
 
+	
 	public Viewer() {
 		// FORM TITLE
 		super("Table Schedule View");
 		
-		JTable table;
 		TableColumn columnModel;
-		ArrayList<Employee> empList = new ArrayList<Employee>();
 		JMenuBar menuBar = new JMenuBar();
 		JMenu empMenu = new JMenu("Employees");
 		JMenu venMenu = new JMenu("Venues");
+		JMenu fileMenu = new JMenu("File");
 		JMenu blackListMenu = new JMenu("Blacklist");
 		JPanel panel = new JPanel();
+		
+		ArrayList<Employee> empList = new ArrayList<Employee>();
+
 
 
 		// Table Data
@@ -93,6 +98,9 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		// Any and all things related to the swing components being attached to the frame
 		
+		//File Menu Items
+		saveFile = new JMenuItem("Export to Excel");
+		
 		// Employee Menu Items
 		addEmployee = new JMenuItem("Add Employee");	
 		removeEmployee = new JMenuItem("Remove Employee");
@@ -108,6 +116,9 @@ public class Viewer extends JFrame implements ActionListener{
 		// Blacklist Menu Items
 		addBlacklisted = new JMenuItem("Add Blacklisted Employee");
 		searchBlacklistedEmployee = new JMenuItem("Search Blacklisted Employees");
+		
+		// Add File Menu Items to the File Menu
+		fileMenu.add(saveFile);
 		
 		// Add Employee Menu Items to the Employee Menu
 		empMenu.add(searchEmployee);
@@ -130,6 +141,8 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		
 		
+		saveFile.addActionListener(this);
+		
 		addEmployee.addActionListener(this);
 		removeEmployee.addActionListener(this);
 		updateEmployee.addActionListener(this);
@@ -144,6 +157,7 @@ public class Viewer extends JFrame implements ActionListener{
 		searchBlacklistedEmployee.addActionListener(this);
 		
 		// Add Menus to the Menu Bar
+		menuBar.add(fileMenu);
 		menuBar.add(empMenu);
 		menuBar.add(venMenu);
 		menuBar.add(blackListMenu);
@@ -173,8 +187,14 @@ public class Viewer extends JFrame implements ActionListener{
 	@Override 
 	public void actionPerformed(ActionEvent menuItem){
 		JTextField empID, empFName, empLName;
-		String inputID;
+		String inputID, fName, lName, saveLocation;
 		
+		
+		// Actions for File Menu Items
+		if(menuItem.getSource().equals(saveFile)){
+			saveLocation = new String("")
+			SaveSchedule(table,);
+		}
 		// Actions for Employee Menu Items
 		// Add way to parse entered data and feed into the respective database functions.
 		if(menuItem.getSource().equals(searchEmployee)){
@@ -195,6 +215,7 @@ public class Viewer extends JFrame implements ActionListener{
 		// Actions for Venue Menu Items
 		if(menuItem.getSource().equals(searchVenue)){
 			inputID = JOptionPane.showInputDialog("Enter Venue ID: ");
+
 			System.out.println("Search Venue");
 		}
 		if(menuItem.getSource().equals(addVenue)){
