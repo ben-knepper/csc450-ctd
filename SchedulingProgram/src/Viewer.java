@@ -196,6 +196,13 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		
 
+
+
+		// Actions for File Menu Items
+//		if(menuItem.getSource().equals(saveFile)){
+//			saveLocation = new String("");
+//			SaveSchedule(table,);
+//		}
 		// Actions for Employee Menu Items
 		// Add way to parse entered data and feed into the respective database functions.
 		if(menuItem.getSource().equals(searchEmployee)){
@@ -221,7 +228,7 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		// Actions for Venue Menu Items
 		if(menuItem.getSource().equals(searchVenue)){
-			inputID= JOptionPane.showInputDialog("Enter a Venue ID Name: ").toString();
+			inputID= JOptionPane.showInputDialog("Enter a Venue ID Name: ");
 			try {
 				venue = Database.searchVenueID(inputID);
 				System.out.println(venue.getName());

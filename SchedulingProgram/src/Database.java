@@ -27,7 +27,6 @@ public final class Database
 			preparedStatement = connection.prepareStatement(
 					"select * from employee;");
 			resultSet = preparedStatement.executeQuery();
-			
 			while (resultSet.next())
 			{
 				String id = resultSet.getString("employeeID");
@@ -67,6 +66,8 @@ public final class Database
 			preparedStatement.setString(2, lName);
 			preparedStatement.setString(3, column);
 			resultSet = preparedStatement.executeQuery();
+			
+			resultSet.next();
 			
 			info = resultSet.getString(column);
 		}
@@ -157,6 +158,8 @@ public final class Database
 			preparedStatement.setString(2, lName);
 			resultSet = preparedStatement.executeQuery();
 			
+			resultSet.next();
+			
 			String eID = resultSet.getString("employeeID");
 			String password = resultSet.getString("password");
 			String phone = resultSet.getString("phone");
@@ -183,6 +186,8 @@ public final class Database
 					"call SearchEmployeeID(?);");
 			preparedStatement.setString(1, eID);
 			resultSet = preparedStatement.executeQuery();
+			
+			resultSet.next();
 			
 			String fName = resultSet.getString("fName");
 			String lName = resultSet.getString("lName");
@@ -263,6 +268,8 @@ public final class Database
 			preparedStatement.setString(3, column);
 			resultSet = preparedStatement.executeQuery();
 			
+			resultSet.next();
+			
 			info = resultSet.getString(column);
 		}
 		catch (Exception e) { throw e; }
@@ -328,6 +335,9 @@ public final class Database
 			preparedStatement.setString(1, name);
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
+			
+			resultSet.next();
+			
 			String vID = resultSet.getString("venueID");
 			int tables = resultSet.getInt("tableNum");
 			String address = resultSet.getString("address");
@@ -344,7 +354,7 @@ public final class Database
 	
 	public static Venue searchVenueID(String vID) throws Exception
 	{
-		Venue venue;
+		Venue venue = null;
 		try
 		{
 			connect();
@@ -354,11 +364,14 @@ public final class Database
 			preparedStatement.setString(1, vID);
 			resultSet = preparedStatement.executeQuery();
 			
+			resultSet.next();
+			
 			String name = resultSet.getString("name");
 			int tables = resultSet.getInt("tableNum");
 			String address = resultSet.getString("address");
 			
 			venue = new Venue(vID, name, tables, address);
+			
 		}
 		catch (Exception e) { throw e; }
 		finally
@@ -367,7 +380,7 @@ public final class Database
 		}
 		return venue;
 	}
-
+	
 	public static void removeVenue(String vID) throws Exception	
 	{
 		try

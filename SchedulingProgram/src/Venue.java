@@ -13,15 +13,6 @@ public class Venue {
 		name = n;
 		tables = t;
 		address = a;
-		times = buildTimeSlots();
-	}
-	
-	public Dictionary<TimeSlot, String> buildTimeSlots() {
-		//creates a dictionary of time slots, each of which contains a "yes" or "no" value.
-		for (int h = 0; h < 168; h++) {
-			times.put(new TimeSlot(h), null);
-		}
-		return times;
 	}
 	
 	public String getID() {

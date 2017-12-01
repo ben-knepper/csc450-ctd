@@ -184,8 +184,8 @@ public class Main {
 	}
 	
 
-	public Venue newVenue(String id, String n, String a, int t) {
-		Venue v = new Venue(id, n, a, t);
+	public Venue newVenue(String id, String n, int t, String a) {
+		Venue v = new Venue(id, n, t, a);
 		return v;
 		
 	}
