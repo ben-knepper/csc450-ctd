@@ -9,20 +9,34 @@ import java.util.Dictionary;
  */
 public class Main {
 	private ArrayList<TimeSlot> slots = new ArrayList<TimeSlot>();
-	private ArrayList<Event> eventsTemplate = new ArrayList<Event>(); // a list of *recurring* blank events
-	private ArrayList<Event> eventsTemp = eventsTemplate; // Object that exists for the population of events
+	private static ArrayList<Event> events = new ArrayList<Event>(); // actual events
+	private static ArrayList<Event> setEvents = new ArrayList<Event>(); // actual events
+
 	
-	private ArrayList<Event> events = new ArrayList<Event>(); // actual events
+	
 	private ArrayList<String> requests = new ArrayList<String>();
+
+	private static ArrayList<Employee> employees = new ArrayList<Employee>();
+
+	private static ArrayList<Venue> venues = new ArrayList<Venue>();
 	
 
+	Random randomizer = new Random();
+	
 	public static void main(String[] args) {
-		Database db = new Database();
 
 		ArrayList<Employee> employees = new ArrayList<Employee>();
 		
+		Database db = new Database();
 		try {
 			employees = db.getEmployees();
+
+			venues = db.getVenues();
+			for (Venue v: venues){
+				Event e = new Event(v, v.getTables());
+				events.add(e);
+
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,28 +49,35 @@ test.scheduleGenerator();
 		/** For all the events in a week, adds employees to each, taking priority into account.     
 		If no employee is found with a higher priority, employee is tested.
 		*/ 
-		eventsTemp = eventsTemplate; //set a series of blank events
-		for (Event e: eventsTemp) {
-			Employee satisfied = null;
-			Employee saved = null; //First employee received from a higher priority.
-			TimeSlot[] eventTimes = e.getTimes();
-			while (satisfied == null){
-				satisfied = tryEmployee(e, eventTimes);
-			}
-			int priority = 0; //a numerical measure of priority
-			for (int tests = 0; tests <5; tests++ ){ //test five additional employees for a higher priority
-				satisfied = tryEmployee(e, eventTimes);
-				if (satisfied != null) {
-					int priority2 = 0;
-					if (priority2 > priority){
-						saved = satisfied;
-					}
-				}
-			}
+		
+
+		
+		for (Event e: events){
+			Employee saved = employees.get(randomizer.nextInt(employees.size())); //first employee
 			e.addEmployee(saved);
-			events.add(e);
+			setEvents.add(e);
+				//Original method. I overcomplicated it. - Steven	
+				/*Employee satisfied = null;
+				Employee saved = employees.get(randomizer.nextInt(employees.size())); //First employee received from a higher priority.
+				TimeSlot[] eventTimes = e.getTimes();
+				while (satisfied == null){
+					satisfied = tryEmployee(e, eventTimes);
+				}
+				int priority = 0; //a numerical measure of priority
+				for (int tests = 0; tests <5; tests++ ){ //test five additional employees for a higher priority
+					satisfied = tryEmployee(e, eventTimes);
+					if (satisfied != null) {
+						int priority2 = 0;
+						if (priority2 > priority){
+							saved = satisfied;
+						}
+					}
+				}*/
+			
 		} 
 	}
+	
+
 	public boolean scheduleCompatible(Dictionary<TimeSlot, String> empTimes, TimeSlot[] eventTimes){
 		/** Given the times of an event and an employee, tests to see if they are compatible.
 		* @param empTimes Dictionary containing employee times.
@@ -68,10 +89,11 @@ test.scheduleGenerator();
 		}
 		return true;
 	}
-	public Employee tryEmployee(Event e, TimeSlot[] eventTimes){
-		/**Tries to add an employee to an event.
-		 * 
-		 */
+
+	
+	public Employee tryEmployee(Event e, TimeSlot[] eventTimes) {
+		//Tries to add an employee to an event.
+		//Unused.
 		Employee tempEmployee = employees.get(randomizer.nextInt(employees.size())); //gets a random employee from the database 
 		Dictionary<TimeSlot, String> empTimes = tempEmployee.getTimes();
 		if (scheduleCompatible(empTimes, eventTimes)){
@@ -91,7 +113,7 @@ test.scheduleGenerator();
 			eventTimes[hour - startTime] = new TimeSlot(hour);
 		}
 		Event e = new Event(v, eventTimes, employeeNum);
-		eventsTemplate.add(e);
+		events.add(e);
 	}
 	
 	public void addEmployeeToEvent(Employee e, Event a){
@@ -123,7 +145,7 @@ test.scheduleGenerator();
 	}
 	
 	public void employeeFavorVenue(Employee e, Venue v) {
-		Database.favorplusone(e, v);
+		//Database.favorplusone(e, v);
 	}
 
 	public void venueBlacklistEmployee(Employee e, Venue v) {
@@ -136,21 +158,22 @@ test.scheduleGenerator();
 	}
 	
 	public void venueFavorEmployee(Employee e, Venue v) {
-		Database.favorplusone(e, v); 
-}
-	
+		//Database.favorplusone(e, v); 
+	}
 	//Calling constructors.
 	public Employee newEmployee(String f, String l, String i,
-			String p, String a, String ip, String E) {
-		Employee e = new Employee(f, l, i, p, a, ip, E);
+			String p, String a, String ip) {
+		Employee e = new Employee(i, f, l, p, a, ip);
 		return e;
 	}
 	public Employee newManager(String f, String l, String i,
-			String p, String a, String ip, String E) {
-		Employee m = new Employee(f, l, i, p, a, ip, E);
+			String p, String a, String ip) {
+		Employee m = new Employee(f, l, i, p, a, ip);
 		m.setManager(true);
 		return m;
 	}
+	
+
 	public Venue newVenue(String id, String n, String a, int t) {
 		Venue v = new Venue(id, n, a, t);
 		return v;
