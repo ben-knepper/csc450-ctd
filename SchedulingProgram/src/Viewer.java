@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -24,46 +25,50 @@ import javax.swing.*;
  *
  *	http://camposha.info/source/java-jtable-button-column/
  */
-public class Viewer extends JFrame {
+public class Viewer extends JFrame implements ActionListener{
+	private Object menuItem;
+	private static JMenuItem 	addEmployee, removeEmployee, updateEmployee, searchEmployee,
+	addVenue, removeVenue, updateVenue, searchVenue,
+	addBlacklisted, searchBlacklistedEmployee;
+
 	public Viewer() {
 		// FORM TITLE
 		super("Table Schedule View");
 		
-		Time date = new Time();
-		JTable table, empInfoTable;
+		JTable table;
 		TableColumn columnModel;
+		ArrayList<Employee> empList = new ArrayList<Employee>();
+		JMenuBar menuBar = new JMenuBar();
+		JMenu empMenu = new JMenu("Employees");
+		JMenu venMenu = new JMenu("Venues");
+		JMenu blackListMenu = new JMenu("Blacklist");
+		JPanel panel = new JPanel();
+
+
 		// Table Data
 		
-		Database db = new Database();
-		ArrayList<Employee> empList = new ArrayList<Employee>();
+		// Get employee data and stores into a list.
 		try {
-			empList = db.getEmployees();
+			empList = Database.getEmployees();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(empList.size());
+		// Initializes array row length to total employee size from database. Columns set to 
 		Object[] colDays = {"Name","Sunday", "Monday", "Tuesday","Wednesday","Thursday","Friday","Saturday"};
-		Object[][] data = new Object[empList.size()][colDays.length]; // Initializes data array to employee length as rows and colNames length as columns
+		Object[][] data = new Object[empList.size()][colDays.length];
 		
 		// Sets data in each of the data Object's cells
 		for (int i = 0; i < empList.size(); i++) {
-			data[i][0] = empList.get(i); //empList.get(i).getFirstName()+ " " + empList.get(i).getLastName();
+			data[i][0] = empList.get(i); 
 
 		}
 		
-		
-
 		table = new JTable(data, colDays);
 
-		
 		// Table resizing
 		table.setAutoResizeMode(table.AUTO_RESIZE_OFF);
-
 		columnModel = table.getColumnModel().getColumn(0);
-		columnModel.setPreferredWidth(180);
-		
-
+		columnModel.setPreferredWidth(180);		
 		
 		for(int i = 1; i < colDays.length; i++){
 			table.setRowHeight(20);
@@ -83,21 +88,141 @@ public class Viewer extends JFrame {
 
 		// SCROLLPANE,SET SZE,SET CLOSE OPERATION
 		JScrollPane pane = new JScrollPane(table);
+		
+		
+		// Any and all things related to the swing components being attached to the frame
+		
+		// Employee Menu Items
+		addEmployee = new JMenuItem("Add Employee");	
+		removeEmployee = new JMenuItem("Remove Employee");
+		updateEmployee = new JMenuItem("Update Employee");
+		searchEmployee = new JMenuItem("Search Employee");
+		
+		// Venue Menu Items
+		addVenue = new JMenuItem("Add Venue");
+		removeVenue = new JMenuItem("Remove Venue");
+		updateVenue = new JMenuItem("Update Venue");
+		searchVenue = new JMenuItem("Search Venue");
+		
+		// Blacklist Menu Items
+		addBlacklisted = new JMenuItem("Add Blacklisted Employee");
+		searchBlacklistedEmployee = new JMenuItem("Search Blacklisted Employees");
+		
+		// Add Employee Menu Items to the Employee Menu
+		empMenu.add(searchEmployee);
+		empMenu.add(updateEmployee);
+		empMenu.add(addEmployee);
+		empMenu.add(removeEmployee);
+		
+		// Add Venue Menu Items to the Employee Menu
+		venMenu.add(searchVenue);
+		venMenu.add(updateVenue);
+		venMenu.add(addVenue);
+		venMenu.add(removeVenue);
+		
+		// Add Blacklist Menu Items to the Blacklist Menu
 
-		getContentPane().add(pane);
-		setSize(1000, 800);
-
+		blackListMenu.add(searchBlacklistedEmployee);
+		blackListMenu.add(addBlacklisted);
+		
+		// Action Listeners for different Menu Items
+		addEmployee.addActionListener(this);
+		removeEmployee.addActionListener(this);
+		updateEmployee.addActionListener(this);
+		searchEmployee.addActionListener(this);
+		
+		addVenue.addActionListener(this);
+		removeVenue.addActionListener(this);
+		updateVenue.addActionListener(this);
+		searchVenue.addActionListener(this);
+		
+		addBlacklisted.addActionListener(this);
+		searchBlacklistedEmployee.addActionListener(this);
+		
+		// Add Menus to the Menu Bar
+		menuBar.add(empMenu);
+		menuBar.add(venMenu);
+		menuBar.add(blackListMenu);
+		
+		
+		// Adds the JTable with the Scroll pane to a Panel so Menus can be displayed on the Frame
+		panel.setLayout(new BorderLayout());
+		panel.add(pane, BorderLayout.CENTER);
+		
+		
+		// Frame settings
+		setSize(634, 920);
+		setLocation(400,300);
+		setLayout(new BorderLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
 
+		// Adding different Swing components to the Frame
+		setJMenuBar(menuBar);
+		add(panel, BorderLayout.CENTER);
+
+	}
+	/**
+	 *  Overrides actionPerformed to allow easier action listeners for all menu items.
+	 * @param menuItem Menu Item that is passed and retrieves a specific function 
+	 * call if the Menu Item equals a some JMenuItem.
+	 */
+	@Override 
+	public void actionPerformed(ActionEvent menuItem){
+		
+		// Actions for Employee Menu Items
+		// Add way to parse entered data and feed into the respective database functions.
+		if(menuItem.getSource().equals(searchEmployee)){
+			System.out.println("Search Employee");
+		}
+		if(menuItem.getSource().equals(addEmployee)){
+			System.out.println("Add Employee");
+		}
+		if(menuItem.getSource().equals(removeEmployee)){
+			System.out.println("Remove Employee");
+		}
+		if(menuItem.getSource().equals(updateEmployee)){
+			System.out.println("Update Employee");
+		}
+		
+		// Actions for Venue Menu Items
+		if(menuItem.getSource().equals(searchVenue)){
+			System.out.println("Search Venue");
+		}
+		if(menuItem.getSource().equals(addVenue)){
+			System.out.println("Add Venue");
+
+		}
+		if(menuItem.getSource().equals(removeVenue)){
+			System.out.println("Remove Venue");
+
+		}
+		if(menuItem.getSource().equals(updateVenue)){
+			System.out.println("Update Venue");
+
+		}
+		
+		// Actions for Blacklisting Employees
+		if(menuItem.getSource().equals(addBlacklisted)){
+			System.out.println("Add Blacklist");
+
+		}
+		if(menuItem.getSource().equals(searchBlacklistedEmployee)){
+			System.out.println("Search Blacklisted");
+
+		}
+	}
+	
+	
 	public static void main(String[] args) {
 		Viewer bc = new Viewer();
 		bc.setVisible(true);
 	}
 }
 
+
+
  /**
-  *  Necessary Renderer class to override JTables distaste for JButtons being inserted normally.
+  *  Necessary Renderer class to override JTables distaste for JButtons.
   *  
   * @author Classical
   *
@@ -122,7 +247,8 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
 }
 
 /**
- * 
+ * Creates a JTable filled with instanced employee information for the button clicked. Includes
+ * Name, ID, Phone number, and email.
  * @author Classical
  *
  */
@@ -131,7 +257,7 @@ class ButtonEditor extends DefaultCellEditor {
 	private String lbl;
 	private boolean clicked;
 	Object [][] empInfoRows;
-	Object[] empColNames = {"Name","Phone Number","Email"};
+	Object[] empColNames = {"ID", "Name","Phone Number","Email"};
 	JTable empInfoTable;
 	
 	
@@ -157,27 +283,26 @@ class ButtonEditor extends DefaultCellEditor {
 		for (ActionListener al : btn.getActionListeners())
 			btn.removeActionListener(al);
 		
-		Object [][] empInfoRows = {{employee.getFullName(),employee.getPhone(),employee.getEmail()}};
+		Object [][] empInfoRows = {{employee.getId(),employee.getFullName(),employee.getPhone(),employee.getEmail()}};
 		empInfoTable = new JTable(empInfoRows, empColNames);
 		
 		btn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable));
+				JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable), employee.getFullName().toString(), JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 
 		return btn;
 	}
 
-	// IF BUTTON CELL VALUE CHNAGES,IF CLICKED THAT IS
+	// DON'T DEAD OPEN INSIDE
 	@Override
 	public Object getCellEditorValue() {
 		if (clicked) {
-			//Fill with JTable emp info
+			// DON'T
 		}
-		// SET IT TO FALSE NOW THAT ITS CLICKED
 		clicked = false;
 		return super.getCellEditorValue();
 	}
@@ -188,10 +313,10 @@ class ButtonEditor extends DefaultCellEditor {
 		clicked = false;
 		return super.stopCellEditing();
 	}
-
+	
+	// DON'T DEAD OPEN INSIDE
 	@Override
 	protected void fireEditingStopped() {
-		// TODO Auto-generated method stub
 		// DON'T
 	}
 }

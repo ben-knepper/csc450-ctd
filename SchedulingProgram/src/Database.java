@@ -162,7 +162,7 @@ public final class Database
 			String phone = resultSet.getString("phone");
 			String email = resultSet.getString("email");
 			
-			employee = new Employee(fName, lName, eID, phone, null, password, email);
+			employee = new Employee(eID, fName, lName, password, phone, email);
 		}
 		catch (Exception e) { throw e; }
 		finally

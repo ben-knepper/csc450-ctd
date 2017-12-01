@@ -23,7 +23,8 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		System.out.print(employees);
+		Main test = new Main();
+		test.scheduleGenerator();
 		
 	}
 	
@@ -31,6 +32,7 @@ public class Main {
 		/** For all the events in a week, adds employees to each, taking priority into account.     
 		If no employee is found with a higher priority, employee is tested.
 		*/ 
+
 		eventsTemp = eventsTemplate; //set a series of blank events
 		for (Event e: eventsTemp) {
 			Employee satisfied = null;
@@ -51,6 +53,9 @@ public class Main {
 			}
 			e.addEmployee(saved);
 			events.add(e);
+			for(int i = 0; i<events.size();i++){
+				System.out.println(events.get(i).getTimes());
+			}
 		} 
 	}
 	
