@@ -41,7 +41,7 @@ public class Main {
 		}
 		
 		Main test = new Main();
-test.scheduleGenerator();
+		test.scheduleGenerator();
 	}
 	public void scheduleGenerator(){
 		/** Generates one day's worth of scheduling, adding employees to all events.

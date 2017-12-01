@@ -327,7 +327,7 @@ public final class Database
 					"call SearchVenue(?)");
 			preparedStatement.setString(1, name);
 			resultSet = preparedStatement.executeQuery();
-			
+			resultSet.next();
 			String vID = resultSet.getString("venueID");
 			int tables = resultSet.getInt("tableNum");
 			String address = resultSet.getString("address");

@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -186,26 +188,31 @@ public class Viewer extends JFrame implements ActionListener{
 	 */
 	@Override 
 	public void actionPerformed(ActionEvent menuItem){
-		JTextField empID, empFName, empLName;
-		String inputID, fName, lName, saveLocation;
+		String 	inputID, inputFName, inputLName,inputPass,inputPhone,inputEmail,
+				inputVenName;
+		Venue venue;
+		boolean inputMan = false;
+
 		
 		
-		// Actions for File Menu Items
-		if(menuItem.getSource().equals(saveFile)){
-			saveLocation = new String("")
-			SaveSchedule(table,);
-		}
+
 		// Actions for Employee Menu Items
 		// Add way to parse entered data and feed into the respective database functions.
 		if(menuItem.getSource().equals(searchEmployee)){
-			inputID = JOptionPane.showInputDialog("Enter Employee ID: ");
 			System.out.println("Search Employee");
 		}
 		if(menuItem.getSource().equals(addEmployee)){
-			System.out.println("Add Employee");
+			createEmployeeInfoBox();
+			System.out.println("Added Employee ");
 		}
 		if(menuItem.getSource().equals(removeEmployee)){
-			
+			inputID = JOptionPane.showInputDialog("Enter the Employee ID for the employee you wish to remove: ");
+			try {
+				Database.removeEmployee(inputID);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("Remove Employee");
 		}
 		if(menuItem.getSource().equals(updateEmployee)){
@@ -214,8 +221,14 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		// Actions for Venue Menu Items
 		if(menuItem.getSource().equals(searchVenue)){
-			inputID = JOptionPane.showInputDialog("Enter Venue ID: ");
-
+			inputID= JOptionPane.showInputDialog("Enter a Venue ID Name: ").toString();
+			try {
+				venue = Database.searchVenueID(inputID);
+				System.out.println(venue.getName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("Search Venue");
 		}
 		if(menuItem.getSource().equals(addVenue)){
@@ -241,7 +254,30 @@ public class Viewer extends JFrame implements ActionListener{
 
 		}
 	}
-	
+	public void createEmployeeInfoBox(){
+//		final String [] addEmpInfoTexts = {"User ID: ", "First Name: ","Last Name: ", "Phone Number: ","Email: "};
+//		final int COLS = 8;
+//		JPanel empInputPanel = new JPanel();
+//		for (int i = 0; i < addEmpInfoTexts.length; i++) {
+//			String labelText = addEmpInfoTexts[i];
+//			empInputPanel.add(new JLabel(labelText));
+//			
+//			JTextField textField = new JTextField(COLS);
+//			empInputPanel.add(textField);
+//		}
+//		empInputPanel.setBorder(BorderFactory.createTitledBorder("Enter Employee Information"));
+//		empInputPanel.setSize(400, 400);
+//		empInputPanel.setVisible(true);
+		
+		JPanel empInputPanel = new JPanel();
+		String[] empInfo = {"User ID: ", "First Name: ","Last Name: ", "Phone Number: ","Email: "};
+		JLabel[] empLabels = new JLabel[5];
+		for(int i = 0; i<empLabels.length;i++){
+			empLabels[i] = new JLabel(empInfo[i],SwingConstants.RIGHT);
+			empInputPanel.add(empLabels[i], BorderLayout.WEST);
+
+		}
+	}
 	
 	public static void main(String[] args) {
 		Viewer bc = new Viewer();
