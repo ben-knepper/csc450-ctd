@@ -43,7 +43,7 @@ public class Main {
 		}
 		
 		Main test = new Main();
-test.scheduleGenerator();
+		test.scheduleGenerator();
 	}
 	public void scheduleGenerator(){
 		/** For all the events in a week, adds employees to each, taking priority into account.     
@@ -52,10 +52,15 @@ test.scheduleGenerator();
 		
 
 		
+	
+		ArrayList<Employee> availableEmps = new ArrayList<Employee>();
 		for (Event e: events){
-			Employee saved = employees.get(randomizer.nextInt(employees.size())); //first employee
+			for (int table = 0; table < e.getTables(); e++){
+			Employee saved = availableEmps.get(randomizer.nextInt(availableEmps.size())); //first employee
 			e.addEmployee(saved);
 			setEvents.add(e);
+			availableEmps.remove(saved);
+			}
 				//Original method. I overcomplicated it. - Steven	
 				/*Employee satisfied = null;
 				Employee saved = employees.get(randomizer.nextInt(employees.size())); //First employee received from a higher priority.
