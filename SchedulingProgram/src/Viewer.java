@@ -26,8 +26,8 @@ import javax.swing.*;
  *	http://camposha.info/source/java-jtable-button-column/
  */
 public class Viewer extends JFrame implements ActionListener{
-	private Object menuItem;
-	private static JMenuItem 	addEmployee, removeEmployee, updateEmployee, searchEmployee,
+	private static JMenuItem 	
+	addEmployee, removeEmployee, updateEmployee, searchEmployee,
 	addVenue, removeVenue, updateVenue, searchVenue,
 	addBlacklisted, searchBlacklistedEmployee;
 
@@ -53,6 +53,7 @@ public class Viewer extends JFrame implements ActionListener{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println(empList.size());
 		// Initializes array row length to total employee size from database. Columns set to 
 		Object[] colDays = {"Name","Sunday", "Monday", "Tuesday","Wednesday","Thursday","Friday","Saturday"};
 		Object[][] data = new Object[empList.size()][colDays.length];
@@ -126,6 +127,9 @@ public class Viewer extends JFrame implements ActionListener{
 		blackListMenu.add(addBlacklisted);
 		
 		// Action Listeners for different Menu Items
+		
+		
+		
 		addEmployee.addActionListener(this);
 		removeEmployee.addActionListener(this);
 		updateEmployee.addActionListener(this);
@@ -168,16 +172,20 @@ public class Viewer extends JFrame implements ActionListener{
 	 */
 	@Override 
 	public void actionPerformed(ActionEvent menuItem){
+		JTextField empID, empFName, empLName;
+		String inputID;
 		
 		// Actions for Employee Menu Items
 		// Add way to parse entered data and feed into the respective database functions.
 		if(menuItem.getSource().equals(searchEmployee)){
+			inputID = JOptionPane.showInputDialog("Enter Employee ID: ");
 			System.out.println("Search Employee");
 		}
 		if(menuItem.getSource().equals(addEmployee)){
 			System.out.println("Add Employee");
 		}
 		if(menuItem.getSource().equals(removeEmployee)){
+			
 			System.out.println("Remove Employee");
 		}
 		if(menuItem.getSource().equals(updateEmployee)){
@@ -186,6 +194,7 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		// Actions for Venue Menu Items
 		if(menuItem.getSource().equals(searchVenue)){
+			inputID = JOptionPane.showInputDialog("Enter Venue ID: ");
 			System.out.println("Search Venue");
 		}
 		if(menuItem.getSource().equals(addVenue)){

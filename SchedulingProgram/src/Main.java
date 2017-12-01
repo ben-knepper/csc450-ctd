@@ -17,12 +17,11 @@ public class Main {
 	
 
 	public static void main(String[] args) {
-		Database db = new Database();
 
 		ArrayList<Employee> employees = new ArrayList<Employee>();
 		
 		try {
-			employees = db.getEmployees();
+			employees = Database.getEmployees();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
