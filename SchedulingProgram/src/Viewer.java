@@ -94,6 +94,7 @@ public class Viewer extends JFrame implements ActionListener{
 		table.getColumnModel().getColumn(0).setCellEditor(
 				new ButtonEditor(new JTextField()));
 
+
 		// SCROLLPANE,SET SZE,SET CLOSE OPERATION
 		JScrollPane pane = new JScrollPane(table);
 		
@@ -188,11 +189,13 @@ public class Viewer extends JFrame implements ActionListener{
 	 */
 	@Override 
 	public void actionPerformed(ActionEvent menuItem){
-		String 	inputID, inputFName, inputLName,inputPass,inputPhone,inputEmail,
-				inputVenName;
+		String 	inputID;
 		Venue venue;
+		Employee employee = null;
 		boolean inputMan = false;
-
+		Object[] empColNames = {"ID", "Name","Phone Number","Email"};
+		JTable empInfoTable;
+		
 		
 		
 
@@ -212,7 +215,16 @@ public class Viewer extends JFrame implements ActionListener{
 		// Actions for Employee Menu Items
 		// Add way to parse entered data and feed into the respective database functions.
 		if(menuItem.getSource().equals(searchEmployee)){
-			System.out.println("Search Employee");
+			inputID = JOptionPane.showInputDialog("Enter a Employee ID Name: ");
+			try {
+				employee = Database.searchEmployeeID(inputID);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Object [][] empInfoRows = {{employee.getId(),employee.getFullName(),employee.getPhone(),employee.getEmail()}};
+			empInfoTable = new JTable(empInfoRows, empColNames);
+			JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable), employee.getFullName().toString(), JOptionPane.INFORMATION_MESSAGE);
 		}
 		if(menuItem.getSource().equals(addEmployee)){
 			createEmployeeInfoBox();
