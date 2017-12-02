@@ -1,22 +1,15 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import com.alee.laf.WebLookAndFeel;
+import com.seaglasslookandfeel.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 /**
  * Viewer class that implements JButton objects into a 2d Object array viewable
@@ -50,16 +43,25 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		ArrayList<Employee> empList = new ArrayList<Employee>();
 
-
+		// Get employee data and stores into a list. Sets look and feel to Nimbus. This can be changed if we don't like it.
+		try {
+			empList = Database.getEmployees();
+		    UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
+			
+//		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//		    	System.out.println(info.getClassName());
+//		        if ("metal".equals(info.getName())) {
+//		            UIManager.setLookAndFeel(info.getClassName());
+//		            break;
+//		        }
+//		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
 
 		// Table Data
 		
-		// Get employee data and stores into a list.
-		try {
-			empList = Database.getEmployees();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 		System.out.println(empList.size());
 		// Initializes array row length to total employee size from database. Columns set to 
 		Object[] colDays = {"Name","Sunday", "Monday", "Tuesday","Wednesday","Thursday","Friday","Saturday"};
@@ -173,14 +175,14 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		// Frame settings
 		setSize(634, 920);
-		setLocation(400,300);
+		setLocation(800,300);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		// Adding different Swing components to the Frame
 		setJMenuBar(menuBar);
 		add(panel, BorderLayout.CENTER);
-
+		
 	}
 	/**
 	 *  Overrides actionPerformed to allow easier action listeners for all menu items.
@@ -190,12 +192,13 @@ public class Viewer extends JFrame implements ActionListener{
 	@Override 
 	public void actionPerformed(ActionEvent menuItem){
 		String 	inputID;
-		Venue venue;
+		Venue venue = null;
 		Employee employee = null;
 		boolean inputMan = false;
 		Object[] empColNames = {"ID", "Name","Phone Number","Email"};
-		JTable empInfoTable;
-		
+		Object[] venColNames = {"ID", "Name", "Table amount","Address"};
+		JTable empInfoTable, venInfoTable;
+		JDialog empInfoBox, venInfoBox;
 		
 		
 
@@ -213,67 +216,101 @@ public class Viewer extends JFrame implements ActionListener{
 //		}
 
 		// Actions for Employee Menu Items
-		// Add way to parse entered data and feed into the respective database functions.
 		if(menuItem.getSource().equals(searchEmployee)){
-			inputID = JOptionPane.showInputDialog("Enter a Employee ID Name: ");
+			empInfoBox = new JDialog();
+			inputID = JOptionPane.showInputDialog("Enter a Employee ID: ");
+			
 			try {
 				employee = Database.searchEmployeeID(inputID);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Object [][] empInfoRows = {{employee.getId(),employee.getFullName(),employee.getPhone(),employee.getEmail()}};
+			Object[][] empInfoRows = {{employee.getId(),employee.getFullName(),employee.getPhone(),employee.getEmail()}};
 			empInfoTable = new JTable(empInfoRows, empColNames);
-			JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable), employee.getFullName().toString(), JOptionPane.INFORMATION_MESSAGE);
+			empInfoBox.setTitle(employee.getFullName());
+			empInfoBox.add(new JScrollPane(empInfoTable));
+			empInfoBox.pack();
+			empInfoBox.setLocation(1450, 500);
+			empInfoBox.setVisible(true);
+			System.out.println("Employee " + employee.getFullName() + " found!");
 		}
+		
+		
 		if(menuItem.getSource().equals(addEmployee)){
-			createEmployeeInfoBox();
+			//TODO ADD MULTI TEXT FIELD BOX TO ADD EMPLOYEE
 			System.out.println("Added Employee ");
 		}
+		
+		
 		if(menuItem.getSource().equals(removeEmployee)){
 			inputID = JOptionPane.showInputDialog("Enter the Employee ID for the employee you wish to remove: ");
 			try {
+				employee = Database.searchEmployeeID(inputID);
 				Database.removeEmployee(inputID);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Remove Employee");
+			System.out.println("Employee " + employee.getFullName() + " has been removed.");
 		}
+		
+		
 		if(menuItem.getSource().equals(updateEmployee)){
 			System.out.println("Update Employee");
 		}
 		
+		
 		// Actions for Venue Menu Items
 		if(menuItem.getSource().equals(searchVenue)){
+			venInfoBox = new JDialog();
 			inputID= JOptionPane.showInputDialog("Enter a Venue ID Name: ");
+			
 			try {
 				venue = Database.searchVenueID(inputID);
-				System.out.println(venue.getName());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Search Venue");
+			
+			Object[][] venInfoRows = {{venue.getID(),venue.getName(),venue.getTables(),venue.getAddress()}};
+			
+			venInfoTable = new JTable(venInfoRows, venColNames);
+			
+			venInfoBox.setTitle(venue.getName());
+			venInfoBox.add(new JScrollPane(venInfoTable));
+			venInfoBox.pack();
+			venInfoBox.setLocation(1450, 500);
+			venInfoBox.setVisible(true);
+			System.out.println("Venue " + venue.getName()+ " found!");
 		}
+		
+		
 		if(menuItem.getSource().equals(addVenue)){
 			System.out.println("Add Venue");
 
 		}
+		
+		
 		if(menuItem.getSource().equals(removeVenue)){
 			System.out.println("Remove Venue");
 
 		}
+		
+		
 		if(menuItem.getSource().equals(updateVenue)){
 			System.out.println("Update Venue");
 
 		}
+		
 		
 		// Actions for Blacklisting Employees
 		if(menuItem.getSource().equals(addBlacklisted)){
 			System.out.println("Add Blacklist");
 
 		}
+		
+		
 		if(menuItem.getSource().equals(searchBlacklistedEmployee)){
 			System.out.println("Search Blacklisted");
 
@@ -350,6 +387,9 @@ class ButtonEditor extends DefaultCellEditor {
 	Object [][] empInfoRows;
 	Object[] empColNames = {"ID", "Name","Phone Number","Email"};
 	JTable empInfoTable;
+	JDialog empInfoBox = new JDialog();
+
+
 	
 	
 
@@ -365,6 +405,7 @@ class ButtonEditor extends DefaultCellEditor {
 	public Component getTableCellEditorComponent(JTable table, Object obj, boolean selected, int row, int col) {
 		
 		// SET TEXT TO BUTTON,SET CLICKED TO TRUE,THEN RETURN THE BTN OBJECT
+		empInfoBox.dispose();
 		Employee employee = (Employee)obj;
 		lbl = (employee == null) ? "" : employee.getFullName();
 		btn.setText(lbl);
@@ -381,6 +422,11 @@ class ButtonEditor extends DefaultCellEditor {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+//				empInfoBox.setTitle(employee.getFullName());
+//				empInfoBox.add(new JScrollPane(empInfoTable));
+//				empInfoBox.pack();
+//				empInfoBox.setVisible(true);
 				JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable), employee.getFullName().toString(), JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
