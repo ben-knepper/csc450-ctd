@@ -53,7 +53,7 @@ public class ExcelExporter {
 		
 		// Write the data
 		for (int i = 0; i < data.length; ++i) {
-			XSSFRow row = sheet.createRow(i+1); // offset by one for the header
+			XSSFRow row = sheet.createRow(i+1); // offset by one because of the header
 			for (int j = 0; j < data[i].length; ++j) {
 				Cell cell = row.createCell(j);
 				cell.setCellValue(data[i][j].toString());
