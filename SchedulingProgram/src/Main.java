@@ -43,12 +43,26 @@ public class Main {
 		Main test = new Main();
 		test.scheduleGenerator();
 	}
-	public void scheduleGenerator(){
+		}
+	public ArrayList<Event> scheduleGenerator(){
 		/** Generates one day's worth of scheduling, adding employees to all events.
 		*/ 
 		
+		Database db = new Database();
+		try {
+			employees = db.getEmployees();
 
+			venues = db.getVenues();
+			for (Venue v: venues){
+				Event e = new Event(v, v.getTables());
+				events.add(e);
 
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ArrayList<Event> newEvents = new ArrayList<Event>();
 		ArrayList<Employee> availableEmps = new ArrayList<Employee>();
 		for (Event e: events){
 			for (int table = 0; table < e.getTables(); table++){
@@ -56,28 +70,10 @@ public class Main {
 			
 			e.addEmployee(saved);
 			setEvents.add(e);
+			newEvents.add(e);
 			availableEmps.remove(saved);
 			}
-				//Original method. I overcomplicated it. - Steven	
-				/*Employee satisfied = null;
-				Employee saved = employees.get(randomizer.nextInt(employees.size())); //First employee received from a higher priority.
-				TimeSlot[] eventTimes = e.getTimes();
-				while (satisfied == null){
-					satisfied = tryEmployee(e, eventTimes);
-				}
-				int priority = 0; //a numerical measure of priority
-				for (int tests = 0; tests <5; tests++ ){ //test five additional employees for a higher priority
-					satisfied = tryEmployee(e, eventTimes);
-					if (satisfied != null) {
-						int priority2 = 0;
-						if (priority2 > priority){
-							saved = satisfied;
-						}
-					}
-				}*/
-			
-		} 
-	}
+		return newEvents;
 	
 
 	public boolean scheduleCompatible(Dictionary<TimeSlot, String> empTimes, TimeSlot[] eventTimes){
