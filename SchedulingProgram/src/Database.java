@@ -147,7 +147,7 @@ public final class Database
 	
 	public static Employee searchEmployee(String fName, String lName) throws Exception
 	{
-		Employee employee;
+		Employee employee = null;
 		try
 		{
 			connect();
@@ -158,14 +158,14 @@ public final class Database
 			preparedStatement.setString(2, lName);
 			resultSet = preparedStatement.executeQuery();
 			
-			resultSet.next();
-			
-			String eID = resultSet.getString("employeeID");
-			String password = resultSet.getString("password");
-			String phone = resultSet.getString("phone");
-			String email = resultSet.getString("email");
-			
-			employee = new Employee(eID, fName, lName, password, phone, email);
+			if (resultSet.next() == true) {			
+				String eID = resultSet.getString("employeeID");
+				String password = resultSet.getString("password");
+				String phone = resultSet.getString("phone");
+				String email = resultSet.getString("email");
+				
+				employee = new Employee(eID, fName, lName, password, phone, email);
+			}
 		}
 		catch (Exception e) { throw e; }
 		finally
@@ -177,7 +177,7 @@ public final class Database
 	
 	public static Employee searchEmployeeID(String eID) throws Exception
 	{
-		Employee employee;
+		Employee employee = null;
 		try
 		{
 			connect();
@@ -187,15 +187,15 @@ public final class Database
 			preparedStatement.setString(1, eID);
 			resultSet = preparedStatement.executeQuery();
 			
-			resultSet.next();
-			
-			String fName = resultSet.getString("fName");
-			String lName = resultSet.getString("lName");
-			String password = resultSet.getString("password");
-			String phone = resultSet.getString("phone");
-			String email = resultSet.getString("email");
-			
-			employee = new Employee(eID, fName, lName, password, phone, email);
+			if (resultSet.next() == true) {
+				String fName = resultSet.getString("fName");
+				String lName = resultSet.getString("lName");
+				String password = resultSet.getString("password");
+				String phone = resultSet.getString("phone");
+				String email = resultSet.getString("email");
+				
+				employee = new Employee(eID, fName, lName, password, phone, email);
+			}
 		}
 		catch (Exception e) { throw e; }
 		finally
@@ -325,7 +325,7 @@ public final class Database
 		
 	public static Venue searchVenue(String name) throws Exception
 	{
-		Venue venue;
+		Venue venue = null;
 		try
 		{
 			connect();
@@ -334,15 +334,14 @@ public final class Database
 					"call SearchVenue(?)");
 			preparedStatement.setString(1, name);
 			resultSet = preparedStatement.executeQuery();
-			resultSet.next();
 			
-			resultSet.next();
-			
-			String vID = resultSet.getString("venueID");
-			int tables = resultSet.getInt("tableNum");
-			String address = resultSet.getString("address");
-			
-			venue = new Venue(vID, name, tables, address);
+			if (resultSet.next() == true) {
+				String vID = resultSet.getString("venueID");
+				int tables = resultSet.getInt("tableNum");
+				String address = resultSet.getString("address");
+				
+				venue = new Venue(vID, name, tables, address);
+			}
 		}
 		catch (Exception e) { throw e; }
 		finally
@@ -364,14 +363,13 @@ public final class Database
 			preparedStatement.setString(1, vID);
 			resultSet = preparedStatement.executeQuery();
 			
-			resultSet.next();
-			
-			String name = resultSet.getString("name");
-			int tables = resultSet.getInt("tableNum");
-			String address = resultSet.getString("address");
-			
-			venue = new Venue(vID, name, tables, address);
-			
+			if (resultSet.next() == true) {
+				String name = resultSet.getString("name");
+				int tables = resultSet.getInt("tableNum");
+				String address = resultSet.getString("address");
+				
+				venue = new Venue(vID, name, tables, address);
+			}
 		}
 		catch (Exception e) { throw e; }
 		finally
