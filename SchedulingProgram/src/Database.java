@@ -763,8 +763,9 @@ public final class Database
 			// load MySql driver
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
-					"jdbc:mysql://" + domain + ":" + port + "/" + database_name,
+					"jdbc:mysql://" + domain + ":" + port + "/" + database_name + "?useSSL=false",
 					sql_username, sql_passwd);
+			System.out.println("Connected to database");
 		}
 		catch (Exception e) { throw e; }
 	}
