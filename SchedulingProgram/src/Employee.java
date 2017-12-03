@@ -129,4 +129,9 @@ public class Employee {
 	public String toString() {
 		return getFullName();
 	}
+	
+	public boolean equals(Employee employee){
+		return this.getId().equals(employee.getId());
+			
+	}
 }

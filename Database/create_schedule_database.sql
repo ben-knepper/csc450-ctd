@@ -1,4 +1,5 @@
 /*Drop tables*/
+drop table if exists scheduled;
 drop table if exists blacklist;
 drop table if exists venue;
 drop table if exists employee;
@@ -30,6 +31,18 @@ create table blacklist (
 	foreign key(employeeID) references employee(employeeID) 
 		on delete cascade 
 		on update cascade,
+	foreign key(venueID) references venue(venueID)
+		on delete cascade
+		on update cascade
+);
+
+create table scheduled (
+	employeeID varchar(10),
+    venueID varchar(10),
+    primary key(employeeID, venueID),
+    foreign key(employeeID) references employee(employeeID)
+		on delete cascade
+        on update cascade,
 	foreign key(venueID) references venue(venueID)
 		on delete cascade
 		on update cascade

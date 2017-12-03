@@ -4,12 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import com.alee.laf.WebLookAndFeel;
-import com.seaglasslookandfeel.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.*;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 /**
  * Viewer class that implements JButton objects into a 2d Object array viewable
@@ -26,6 +24,20 @@ public class Viewer extends JFrame implements ActionListener{
 	addVenue, removeVenue, updateVenue, searchVenue,
 	saveFile,
 	addBlacklisted, searchBlacklistedEmployee;
+	
+	JTextField addID, addFName, addLName, addPassword, addPhone, addEmail, addVenAddress, addVenName, addVenTables;
+	JMenuBar menuBar;
+	JMenu empMenu, venMenu, fileMenu, blackListMenu;
+	DefaultTableModel tableModel;
+	Scheduler generateSchedule = new Scheduler();
+	ArrayList<Event> scheduler;
+	
+	
+
+	
+	
+	Object[] empInfo, venInfo;
+	
 	static JTable table;
 
 	
@@ -34,11 +46,11 @@ public class Viewer extends JFrame implements ActionListener{
 		super("Table Schedule View");
 		
 		TableColumn columnModel;
-		JMenuBar menuBar = new JMenuBar();
-		JMenu empMenu = new JMenu("Employees");
-		JMenu venMenu = new JMenu("Venues");
-		JMenu fileMenu = new JMenu("File");
-		JMenu blackListMenu = new JMenu("Blacklist");
+		menuBar = new JMenuBar();
+		empMenu = new JMenu("Employees");
+		venMenu = new JMenu("Venues");
+		fileMenu = new JMenu("File");
+		blackListMenu = new JMenu("Blacklist");
 		JPanel panel = new JPanel();
 		
 		ArrayList<Employee> empList = new ArrayList<Employee>();
@@ -48,13 +60,6 @@ public class Viewer extends JFrame implements ActionListener{
 			empList = Database.getEmployees();
 		    UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
 			
-//		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-//		    	System.out.println(info.getClassName());
-//		        if ("metal".equals(info.getName())) {
-//		            UIManager.setLookAndFeel(info.getClassName());
-//		            break;
-//		        }
-//		    }
 		} catch (Exception e) {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
@@ -62,16 +67,37 @@ public class Viewer extends JFrame implements ActionListener{
 		// Table Data
 		
 
-		System.out.println(empList.size());
 		// Initializes array row length to total employee size from database. Columns set to 
 		Object[] colDays = {"Name","Sunday", "Monday", "Tuesday","Wednesday","Thursday","Friday","Saturday"};
 		Object[][] data = new Object[empList.size()][colDays.length];
-		
 		// Sets data in each of the data Object's cells
-		for (int i = 0; i < empList.size(); i++) {
-			data[i][0] = empList.get(i); 
-
+		ArrayList<ArrayList<Event>> schedulerList = new ArrayList<ArrayList<Event>>();
+		for(int i = 0; i < colDays.length; i++){
+			scheduler = generateSchedule.scheduleGenerator();
+			schedulerList.add(scheduler);
 		}
+		for (int i = 0; i < empList.size(); i++) { //empList.size()
+				Employee employee = empList.get(i);
+				
+				for(int fillDays = 0; fillDays < colDays.length; fillDays++){
+					scheduler = schedulerList.get(fillDays);
+					Venue venue = null;
+					for(Event event: scheduler){
+						if(event.getEmployee().equals(employee)){
+							venue = event.getVenue();
+						}
+					}
+					if(venue!= null){
+						data[i][fillDays] = venue.getName();
+					}
+				}
+				data[i][0] = empList.get(i);		
+		}
+//		for(int i = 1; i < scheduler.size(); i++){
+//			for(int j = 0; j < colDays.length; j++){
+//				data[i][j] = scheduler.get(i).getVenue();
+//			}
+//		}
 		
 		table = new JTable(data, colDays);
 
@@ -83,10 +109,10 @@ public class Viewer extends JFrame implements ActionListener{
 		for(int i = 1; i < colDays.length; i++){
 			table.setRowHeight(20);
 			columnModel = table.getColumnModel().getColumn(i);
-			columnModel.setPreferredWidth(60);
+			columnModel.setPreferredWidth(150);
 		}
 		
-
+	
 
 		// Sets a particular Column as JButtons
 		table.getColumnModel().getColumn(0).setCellRenderer(new ButtonRenderer());
@@ -174,10 +200,11 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		
 		// Frame settings
-		setSize(634, 920);
+		setSize(1280, 720);
 		setLocation(800,300);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setVisible(true);
 
 		// Adding different Swing components to the Frame
 		setJMenuBar(menuBar);
@@ -194,11 +221,6 @@ public class Viewer extends JFrame implements ActionListener{
 		String 	inputID;
 		Venue venue = null;
 		Employee employee = null;
-		boolean inputMan = false;
-		Object[] empColNames = {"ID", "Name","Phone Number","Email"};
-		Object[] venColNames = {"ID", "Name", "Table amount","Address"};
-		JTable empInfoTable, venInfoTable;
-		JDialog empInfoBox, venInfoBox;
 		
 		
 
@@ -217,7 +239,7 @@ public class Viewer extends JFrame implements ActionListener{
 
 		// Actions for Employee Menu Items
 		if(menuItem.getSource().equals(searchEmployee)){
-			empInfoBox = new JDialog();
+
 			inputID = JOptionPane.showInputDialog("Enter a Employee ID: ");
 			
 			try {
@@ -231,13 +253,6 @@ public class Viewer extends JFrame implements ActionListener{
 														"Phone: " + employee.getPhone() + "\n" +
 														"Email: " + employee.getEmail(), "Employee Info", JOptionPane.INFORMATION_MESSAGE);
 
-//					Object[][] empInfoRows = {{employee.getId(),employee.getFullName(),employee.getPhone(),employee.getEmail()}};
-//					empInfoTable = new JTable(empInfoRows, empColNames);
-//					empInfoBox.setTitle(employee.getFullName());
-//					empInfoBox.add(new JScrollPane(empInfoTable));
-//					empInfoBox.pack();
-//					empInfoBox.setLocation(1450, 500);
-//					empInfoBox.setVisible(true);
 					System.out.println("Employee " + employee.getFullName() + " found!");
 				}
 			} catch (Exception e) {
@@ -248,8 +263,16 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		
 		if(menuItem.getSource().equals(addEmployee)){
-			//TODO ADD MULTI TEXT FIELD BOX TO ADD EMPLOYEE
-			System.out.println("Added Employee ");
+			addID = new JTextField(10);
+			addFName = new JTextField(15);
+			addLName = new JTextField(15);
+			addPassword = new JTextField(15);
+			addPhone = new JTextField(15);
+			addEmail = new JTextField(25);
+			
+			Object[] empInfo = {"User ID: ", addID, "First Name: ", addFName, "Last Name: ", addLName, "Choose a Password: ", addPassword, "Phone Number: ", addPhone, "Email: ", addEmail};
+			createEmployeeInfoBox(empInfo, "Add a New Employee");
+						
 		}
 		
 		
@@ -285,16 +308,6 @@ public class Viewer extends JFrame implements ActionListener{
 														"Name: " + venue.getName() + "\n" +
 														"Table Amount: " + venue.getTables() + "\n" +
 														"Address: " + venue.getAddress(), "Venue Info", JOptionPane.INFORMATION_MESSAGE);
-//					Object[][] venInfoRows = {{venue.getID(),venue.getName(),venue.getTables(),venue.getAddress()}};
-//					
-//					venInfoTable = new JTable(venInfoRows, venColNames);
-//					venInfoBox = new JDialog();
-//					
-//					venInfoBox.setTitle(venue.getName());
-//					venInfoBox.add(new JScrollPane(venInfoTable));
-//					venInfoBox.pack();
-//					venInfoBox.setLocation(1450, 500);
-//					venInfoBox.setVisible(true);
 					System.out.println("Venue " + venue.getName()+ " found!");
 				}
 			} catch (Exception e) {
@@ -305,13 +318,27 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		
 		if(menuItem.getSource().equals(addVenue)){
-			System.out.println("Add Venue");
+			addID = new JTextField(10);
+			addVenName = new JTextField(15);
+			addVenTables = new JTextField(15);
+			addVenAddress = new JTextField(25);
+			
+			Object[] venInfo = {"Venue ID: ", addID, "Venue Name: ", addVenName, "Table Amount: ", addVenTables, "Address: ", addVenAddress};
+			createVenueInfoBox(venInfo, "Add a New Venue");
 
 		}
 		
 		
 		if(menuItem.getSource().equals(removeVenue)){
-			System.out.println("Remove Venue");
+			inputID = JOptionPane.showInputDialog("Enter a Employee ID: ");
+			try {
+				venue = Database.searchVenue(inputID);
+				Database.removeVenue(inputID);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("Removed Venue " + venue);
 
 		}
 		
@@ -334,35 +361,30 @@ public class Viewer extends JFrame implements ActionListener{
 
 		}
 	}
-	private String toUpperCase(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public void createEmployeeInfoBox(){
-//		final String [] addEmpInfoTexts = {"User ID: ", "First Name: ","Last Name: ", "Phone Number: ","Email: "};
-//		final int COLS = 8;
-//		JPanel empInputPanel = new JPanel();
-//		for (int i = 0; i < addEmpInfoTexts.length; i++) {
-//			String labelText = addEmpInfoTexts[i];
-//			empInputPanel.add(new JLabel(labelText));
-//			
-//			JTextField textField = new JTextField(COLS);
-//			empInputPanel.add(textField);
-//		}
-//		empInputPanel.setBorder(BorderFactory.createTitledBorder("Enter Employee Information"));
-//		empInputPanel.setSize(400, 400);
-//		empInputPanel.setVisible(true);
-		
-		JPanel empInputPanel = new JPanel();
-		String[] empInfo = {"User ID: ", "First Name: ","Last Name: ", "Phone Number: ","Email: "};
-		JLabel[] empLabels = new JLabel[5];
-		for(int i = 0; i<empLabels.length;i++){
-			empLabels[i] = new JLabel(empInfo[i],SwingConstants.RIGHT);
-			empInputPanel.add(empLabels[i], BorderLayout.WEST);
 
+	public void createEmployeeInfoBox(Object[] empInfo, String boxTitle){
+		try {
+			JOptionPane.showConfirmDialog(null, empInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
+			Database.addEmployee(addID.getText(), addFName.getText(), addLName.getText(), addPassword.getText(), addPhone.getText(), addEmail.getText(), false);
+			System.out.println("Successfully added " + addFName.getText() + " " + addLName.getText() + " to the employee roster!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Error with employee information. Please try again!");
+		}
+				
+	}
+	public void createVenueInfoBox(Object[] venInfo, String boxTitle){
+		try {
+			JOptionPane.showConfirmDialog(null, venInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
+			Database.addVenue(addID.getText(), addVenName.getText(), addVenTables.getText(), addVenAddress.getText());
+			System.out.println("Successfully added " + addVenName.getText() + " to the Venue roster!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Error with Venue information. Please try again!");
 		}
 	}
-	
 	public static void main(String[] args) {
 		Viewer bc = new Viewer();
 		bc.setVisible(true);
@@ -409,7 +431,7 @@ class ButtonEditor extends DefaultCellEditor {
 	Object [][] empInfoRows;
 	Object[] empColNames = {"ID", "Name","Phone Number","Email"};
 	JTable empInfoTable;
-	JDialog empInfoBox = new JDialog();
+	JDialog empInfoBox;
 
 
 	
@@ -427,7 +449,6 @@ class ButtonEditor extends DefaultCellEditor {
 	public Component getTableCellEditorComponent(JTable table, Object obj, boolean selected, int row, int col) {
 		
 		// SET TEXT TO BUTTON,SET CLICKED TO TRUE,THEN RETURN THE BTN OBJECT
-		empInfoBox.dispose();
 		Employee employee = (Employee)obj;
 		lbl = (employee == null) ? "" : employee.getFullName();
 		btn.setText(lbl);
@@ -440,17 +461,22 @@ class ButtonEditor extends DefaultCellEditor {
 		Object [][] empInfoRows = {{employee.getId(),employee.getFullName(),employee.getPhone(),employee.getEmail()}};
 		empInfoTable = new JTable(empInfoRows, empColNames);
 		
+
 		btn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+//				empInfoBox = new JDialog();
+//				JScrollPane scrollPane = new JScrollPane(empInfoTable);
+//				scrollPane.setSize(400, 400);
+//				empInfoBox.add(scrollPane);
 //				empInfoBox.setTitle(employee.getFullName());
-//				empInfoBox.add(new JScrollPane(empInfoTable));
 //				empInfoBox.pack();
 //				empInfoBox.setVisible(true);
-				JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable), employee.getFullName().toString(), JOptionPane.INFORMATION_MESSAGE);
-			}
+				JOptionPane.showMessageDialog(null, "ID: " + employee.getId().toUpperCase() + "\n" +
+						"Name: " + employee.getFullName() + "\n" +
+						"Phone: " + employee.getPhone() + "\n" +
+						"Email: " + employee.getEmail(), "Employee Info", JOptionPane.INFORMATION_MESSAGE);			}
 		});
 
 		return btn;
