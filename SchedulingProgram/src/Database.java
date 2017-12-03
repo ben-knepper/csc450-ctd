@@ -355,6 +355,13 @@ public final class Database
 	}
 	
 	/*Connects to the database and updates one field of one venue's info*/
+	/**
+	 * 
+	 * @param column is what item you want to replace
+	 * @param value is what you are changing the item to
+	 * @param ID is the employee or venue id that you are wishing to change.
+	 * @throws Exception
+	 */
 	public static void updateVenue(String column, String value, String ID) throws Exception
 	{
 		try
@@ -628,6 +635,8 @@ public final class Database
 		ArrayList<Event> events = new ArrayList<Event>();
 		try
 		{
+			ArrayList<Employee> employees = getEmployees();
+			ArrayList<Venue> venues = getVenues();
 			/*Open connection to the database*/
 			connect();
 			
@@ -642,7 +651,17 @@ public final class Database
 				String eID = resultSet.getString("employeeID");
 				String vID = resultSet.getString("venueID");
 				
-				Event event = new Event(eID, vID);
+				Employee employee = null;
+				Venue venue = null;
+				for (Employee e : employees) {
+					if (e.getId().equals(eID))
+						employee = e;
+				}
+				for (Venue v : venues) {
+					if (v.getID().equals(vID))
+						venue = v;
+				}
+				Event event = new Event(venue, employee);
 				events.add(event);
 			}
 		}
