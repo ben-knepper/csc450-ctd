@@ -227,9 +227,12 @@ public class Viewer extends JFrame implements ActionListener{
 
 		// Actions for File Menu Items
 
-//		if(menuItem.getSource().equals(saveFile)){
-//			
-//		}
+		if(menuItem.getSource().equals(saveFile)){
+			String fileName = JOptionPane.showInputDialog("File name:");
+			ExcelExporter ee = new ExcelExporter(fileName);
+			ee.addSheet("Schedule", ExcelExporter.scheduleHeaders, data);
+			ee.finish();
+		}
 
 
 		// Actions for Employee Menu Items
