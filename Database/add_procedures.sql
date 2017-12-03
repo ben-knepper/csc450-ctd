@@ -196,4 +196,33 @@ begin
         and venueID = vID;
 end//
 
+/*Scheduled functions*/
+CREATE PROCEDURE AddScheduled (
+	in eID varchar(10),
+    in vID varchar(10)
+)
+BEGIN
+	insert into scheduled values(
+		eID, vID
+	);
+END//
+
+CREATE PROCEDURE SearchScheduledEmployee (
+	in eID varchar(10)
+)
+BEGIN
+	select venueID from scheduled
+		where eId = employeeID;
+END//
+
+CREATE PROCEDURE RemoveScheduled (
+	in eID varchar(10),
+    in vID varchar(10)
+)
+BEGIN
+	delete from scheduled
+		where eID = employeeID
+		and vID = VenueID;
+END//
+
 delimiter ;
