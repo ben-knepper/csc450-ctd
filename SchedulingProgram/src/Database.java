@@ -233,7 +233,7 @@ public final class Database
 			connect();
 			
 			preparedStatement = connection.prepareStatement(
-					"call GetTable(venue);");
+					"select * from venue;");
 			resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next())
