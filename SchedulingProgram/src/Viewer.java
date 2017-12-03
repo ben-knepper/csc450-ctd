@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -387,7 +388,7 @@ class ButtonEditor extends DefaultCellEditor {
 	Object [][] empInfoRows;
 	Object[] empColNames = {"ID", "Name","Phone Number","Email"};
 	JTable empInfoTable;
-	JDialog empInfoBox = new JDialog();
+	JDialog empInfoBox;
 
 
 	
@@ -405,7 +406,6 @@ class ButtonEditor extends DefaultCellEditor {
 	public Component getTableCellEditorComponent(JTable table, Object obj, boolean selected, int row, int col) {
 		
 		// SET TEXT TO BUTTON,SET CLICKED TO TRUE,THEN RETURN THE BTN OBJECT
-		empInfoBox.dispose();
 		Employee employee = (Employee)obj;
 		lbl = (employee == null) ? "" : employee.getFullName();
 		btn.setText(lbl);
@@ -418,16 +418,19 @@ class ButtonEditor extends DefaultCellEditor {
 		Object [][] empInfoRows = {{employee.getId(),employee.getFullName(),employee.getPhone(),employee.getEmail()}};
 		empInfoTable = new JTable(empInfoRows, empColNames);
 		
+
 		btn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-//				empInfoBox.setTitle(employee.getFullName());
-//				empInfoBox.add(new JScrollPane(empInfoTable));
-//				empInfoBox.pack();
-//				empInfoBox.setVisible(true);
-				JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable), employee.getFullName().toString(), JOptionPane.INFORMATION_MESSAGE);
+				empInfoBox = new JDialog();
+				JScrollPane scrollPane = new JScrollPane(empInfoTable);
+				scrollPane.setSize(400, 400);
+				empInfoBox.add(scrollPane);
+				empInfoBox.setTitle(employee.getFullName());
+				empInfoBox.pack();
+				empInfoBox.setVisible(true);
+				//JOptionPane.showMessageDialog(null, new JScrollPane(empInfoTable), employee.getFullName().toString(), JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 
