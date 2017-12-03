@@ -223,18 +223,28 @@ public class Viewer extends JFrame implements ActionListener{
 			
 			try {
 				employee = Database.searchEmployeeID(inputID);
+				if (employee == null) {
+					JOptionPane.showMessageDialog(null, "No employee with that ID was found", "Invaild ID", JOptionPane.INFORMATION_MESSAGE);
+					System.out.println("Invalid ID");
+				} else {
+					JOptionPane.showMessageDialog(null, "ID: " + employee.getId().toUpperCase() + "\n" +
+														"Name: " + employee.getFullName() + "\n" +
+														"Phone: " + employee.getPhone() + "\n" +
+														"Email: " + employee.getEmail(), "Employee Info", JOptionPane.INFORMATION_MESSAGE);
+
+//					Object[][] empInfoRows = {{employee.getId(),employee.getFullName(),employee.getPhone(),employee.getEmail()}};
+//					empInfoTable = new JTable(empInfoRows, empColNames);
+//					empInfoBox.setTitle(employee.getFullName());
+//					empInfoBox.add(new JScrollPane(empInfoTable));
+//					empInfoBox.pack();
+//					empInfoBox.setLocation(1450, 500);
+//					empInfoBox.setVisible(true);
+					System.out.println("Employee " + employee.getFullName() + " found!");
+				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Object[][] empInfoRows = {{employee.getId(),employee.getFullName(),employee.getPhone(),employee.getEmail()}};
-			empInfoTable = new JTable(empInfoRows, empColNames);
-			empInfoBox.setTitle(employee.getFullName());
-			empInfoBox.add(new JScrollPane(empInfoTable));
-			empInfoBox.pack();
-			empInfoBox.setLocation(1450, 500);
-			empInfoBox.setVisible(true);
-			System.out.println("Employee " + employee.getFullName() + " found!");
 		}
 		
 		
@@ -264,26 +274,34 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		// Actions for Venue Menu Items
 		if(menuItem.getSource().equals(searchVenue)){
-			venInfoBox = new JDialog();
-			inputID= JOptionPane.showInputDialog("Enter a Venue ID Name: ");
+			inputID = JOptionPane.showInputDialog("Enter a Venue ID Name: ");
 			
 			try {
 				venue = Database.searchVenueID(inputID);
+				if (venue == null) {
+					JOptionPane.showMessageDialog(null, "No venue with that ID was found", "Invaild ID", JOptionPane.INFORMATION_MESSAGE);
+					System.out.println("Invalid ID");
+				} else {
+					JOptionPane.showMessageDialog(null, "ID: " + venue.getID().toUpperCase() + "\n" +
+														"Name: " + venue.getName() + "\n" +
+														"Table Amount: " + venue.getTables() + "\n" +
+														"Address: " + venue.getAddress(), "Venue Info", JOptionPane.INFORMATION_MESSAGE);
+//					Object[][] venInfoRows = {{venue.getID(),venue.getName(),venue.getTables(),venue.getAddress()}};
+//					
+//					venInfoTable = new JTable(venInfoRows, venColNames);
+//					venInfoBox = new JDialog();
+//					
+//					venInfoBox.setTitle(venue.getName());
+//					venInfoBox.add(new JScrollPane(venInfoTable));
+//					venInfoBox.pack();
+//					venInfoBox.setLocation(1450, 500);
+//					venInfoBox.setVisible(true);
+					System.out.println("Venue " + venue.getName()+ " found!");
+				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			Object[][] venInfoRows = {{venue.getID(),venue.getName(),venue.getTables(),venue.getAddress()}};
-			
-			venInfoTable = new JTable(venInfoRows, venColNames);
-			
-			venInfoBox.setTitle(venue.getName());
-			venInfoBox.add(new JScrollPane(venInfoTable));
-			venInfoBox.pack();
-			venInfoBox.setLocation(1450, 500);
-			venInfoBox.setVisible(true);
-			System.out.println("Venue " + venue.getName()+ " found!");
 		}
 		
 		
@@ -316,6 +334,10 @@ public class Viewer extends JFrame implements ActionListener{
 			System.out.println("Search Blacklisted");
 
 		}
+	}
+	private String toUpperCase(String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	public void createEmployeeInfoBox(){
 //		final String [] addEmpInfoTexts = {"User ID: ", "First Name: ","Last Name: ", "Phone Number: ","Email: "};
