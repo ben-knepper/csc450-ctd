@@ -20,6 +20,10 @@ drop procedure if exists SearchBlacklistedEmployee;
 drop procedure if exists SearchBlacklistedVenue;
 drop procedure if exists RemoveBlacklisted;
 
+drop procedure if exists AddScheduled;
+drop procedure if exists SearchScheduled;
+drop procedure if exists RemoveScheduled;
+
 delimiter //
 
 create procedure GetTable(
@@ -165,7 +169,7 @@ create procedure AddBlacklisted(
 	in v_id varchar(10)
 )
 begin
-	insert into blacklisted values(
+	insert into blacklist values(
 		e_id, v_id
 	);
 end//
@@ -174,7 +178,7 @@ create procedure SearchBlacklistedEmployee(
 	in e_id varchar(10)
 )
 begin
-	select venueID from blacklisted
+	select venueID from blacklist
 		where e_id = employeeID;
 end//
 
@@ -182,7 +186,7 @@ create procedure SearchBlacklistedVenue(
 	in v_id varchar(10)
 )
 begin
-	select employeeID from blacklisted
+	select employeeID from blacklist
 		where v_id = venueID;
 end//
 
