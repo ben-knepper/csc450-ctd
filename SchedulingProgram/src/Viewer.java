@@ -3,6 +3,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -22,7 +23,7 @@ public class Viewer extends JFrame implements ActionListener{
 	private static JMenuItem 	
 	addEmployee, removeEmployee, updateEmployee, searchEmployee,
 	addVenue, removeVenue, updateVenue, searchVenue,
-	saveFile,
+	saveFile, refreshTable,
 	addBlacklisted, searchBlacklistedEmployee;
 	JTextField whatToUpdateField; //= new JTextField(25);
 	JTextField updateField;// = new JTextField(25);
@@ -35,6 +36,10 @@ public class Viewer extends JFrame implements ActionListener{
 	ArrayList<Event> scheduler;
 	Object[][] data;
 	String 	inputID;
+	DefaultTableModel model;
+	Employee employee;
+	ArrayList<Employee> empList;
+	
 	
 	
 
@@ -57,7 +62,7 @@ public class Viewer extends JFrame implements ActionListener{
 		blackListMenu = new JMenu("Blacklist");
 		JPanel panel = new JPanel();
 		
-		ArrayList<Employee> empList = new ArrayList<Employee>();
+		empList = new ArrayList<Employee>();
 
 		// Get employee data and stores into a list. Sets look and feel to Nimbus. This can be changed if we don't like it.
 		try {
@@ -96,8 +101,8 @@ public class Viewer extends JFrame implements ActionListener{
 				data[i][0] = empList.get(i);		
 		}
 		
-		
-		table = new JTable(data, colDays);
+		model = new DefaultTableModel(data, colDays);
+		table = new JTable(model);
 
 		// Table resizing
 		table.setAutoResizeMode(table.AUTO_RESIZE_OFF);
@@ -130,6 +135,7 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		//File Menu Items
 		saveFile = new JMenuItem("Export to Excel");
+		refreshTable = new JMenuItem("Refresh");
 		
 		// Employee Menu Items
 		addEmployee = new JMenuItem("Add Employee");	
@@ -148,6 +154,7 @@ public class Viewer extends JFrame implements ActionListener{
 		searchBlacklistedEmployee = new JMenuItem("Search Blacklisted Employees");
 		
 		// Add File Menu Items to the File Menu
+		fileMenu.add(refreshTable);
 		fileMenu.add(saveFile);
 		
 		// Add Employee Menu Items to the Employee Menu
@@ -197,7 +204,7 @@ public class Viewer extends JFrame implements ActionListener{
 		panel.setLayout(new BorderLayout());
 		panel.add(pane, BorderLayout.CENTER);
 		
-		
+		table.repaint();
 		// Frame settings
 		setSize(1280, 720);
 		setLocation(800,300);
@@ -226,12 +233,17 @@ public class Viewer extends JFrame implements ActionListener{
 
 
 		// Actions for File Menu Items
+		
+		if(menuItem.getSource().equals(refreshTable)){
 
+		}	
+		
 		if(menuItem.getSource().equals(saveFile)){
 			String fileName = JOptionPane.showInputDialog("File name:");
 			ExcelExporter ee = new ExcelExporter(fileName);
 			ee.addSheet("Schedule", ExcelExporter.scheduleHeaders, data);
 			ee.finish();
+			JOptionPane.showMessageDialog(null, "File " + fileName + " successfully saved!");
 		}
 
 
@@ -259,7 +271,6 @@ public class Viewer extends JFrame implements ActionListener{
 			}
 		}
 		
-		
 		if(menuItem.getSource().equals(addEmployee)){
 			addID = new JTextField(10);
 			addFName = new JTextField(15);
@@ -270,7 +281,6 @@ public class Viewer extends JFrame implements ActionListener{
 			
 			Object[] empInfo = {"User ID: ", addID, "First Name: ", addFName, "Last Name: ", addLName, "Choose a Password: ", addPassword, "Phone Number: ", addPhone, "Email: ", addEmail};
 			createEmployeeInfoBox(empInfo, "Add a New Employee");
-						
 		}
 		
 		
@@ -284,6 +294,7 @@ public class Viewer extends JFrame implements ActionListener{
 				e.printStackTrace();
 			}
 			System.out.println("Employee " + employee.getFullName() + " has been removed.");
+
 		}
 		
 		
@@ -353,7 +364,7 @@ public class Viewer extends JFrame implements ActionListener{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Removed venue " + venue);
+			System.out.println("Removed venue " + venue.getName());
 
 		}
 		
@@ -365,7 +376,7 @@ public class Viewer extends JFrame implements ActionListener{
 			try {
 				venue = Database.searchVenueID(inputID);
 				addVenName = new JTextField(venue.getName());
-				addVenTables = new JTextField(venue.getTables());
+				addVenTables = new JTextField(String.valueOf(venue.getTables()));
 				addVenAddress = new JTextField(venue.getAddress());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -422,6 +433,7 @@ public class Viewer extends JFrame implements ActionListener{
 		try {
 			JOptionPane.showConfirmDialog(null, venInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
 			Database.addVenue(addID.getText(), addVenName.getText(), addVenTables.getText(), addVenAddress.getText());
+			
 			System.out.println("Successfully added " + addVenName.getText() + " to the Venue roster!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
