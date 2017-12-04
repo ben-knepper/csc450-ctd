@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Vector;
 import java.util.HashMap;
 
 import javax.swing.table.DefaultTableModel;
@@ -345,6 +344,7 @@ public class Viewer extends JFrame implements ActionListener{
 				employee = Database.searchEmployeeID(inputID);
 				addFName = new JTextField(employee.getFirstName());
 				addLName= new JTextField(employee.getLastName());
+				addPassword = new JTextField(employee.getPassword());
 				addPhone = new JTextField(employee.getPhone());
 				addEmail = new JTextField(employee.getEmail());
 			} catch (Exception e) {

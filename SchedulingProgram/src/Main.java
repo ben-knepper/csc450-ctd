@@ -12,9 +12,6 @@ import java.util.Dictionary;
  *
  */
 public class Main {
-//	private ArrayList<TimeSlot> slots = new ArrayList<TimeSlot>();
-//	private static ArrayList<Event> setEvents = new ArrayList<Event>(); // actual events
-//	private ArrayList<String> requests = new ArrayList<String>();
 
 	public Main(){
 	}
