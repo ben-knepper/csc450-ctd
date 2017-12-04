@@ -7,9 +7,9 @@ public final class Database
 	//Data needed to access server and database
 	private final static String domain = "65.184.201.211";
 	private final static String port = "3306";
-	private final static String database_name = "csc450"; //"faf9072";
-	private final static String sql_username = "ctd"; //"faf9072";
-	private final static String sql_passwd = "eG*OSrpn4NZy"; //"xyreddf15";
+	private final static String database_name = "csc450";
+	private final static String sql_username = "ctd";
+	private final static String sql_passwd = "eG*OSrpn4NZy";
 	
 	private static Connection connection;
 	private static Statement statement;

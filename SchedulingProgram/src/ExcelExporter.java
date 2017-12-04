@@ -11,7 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ExcelExporter {
 	
 	public static final String[] scheduleHeaders =
-		{ "Employee", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+		{ "Employee", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 	
 	XSSFWorkbook workbook;
 	FileOutputStream out;
