@@ -12,6 +12,13 @@ public class Scheduler {
 	Random randomizer;
 
 	public Scheduler() {
+		try {
+			employees = Database.getEmployees();
+			venues = Database.getVenues();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public ArrayList<Event> scheduleGenerator() {
@@ -20,29 +27,22 @@ public class Scheduler {
 		 * events.
 		 */
 		randomizer = new Random();
-		try {
-			employees = Database.getEmployees();
-			venues = Database.getVenues();
-			// Creates a list of venues based on the total number of tables
-			// across all venues.
-			for (Venue venue : venues) {
-				int tables = venue.getTables();
-				for (int i = 0; i < tables; i++) {
-					totalVenueSize.add(venue);
-				}
-			}
-			ArrayList<Employee> usedEmployees = (ArrayList<Employee>) employees.clone();
-			events = new ArrayList<Event>();
-			for (int i = 0; i < totalVenueSize.size() && usedEmployees.size() > 0; i++) {
-				int index = randomizer.nextInt(usedEmployees.size());
-				event = new Event(totalVenueSize.get(i), usedEmployees.get(index));
-				events.add(event);
-				usedEmployees.remove(index);
-			}
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// Creates a list of venues based on the total number of tables
+		// across all venues.
+		for (Venue venue : venues) {
+			int tables = venue.getTables();
+			for (int i = 0; i < tables; i++) {
+				totalVenueSize.add(venue);
+			}
+		}
+		ArrayList<Employee> usedEmployees = (ArrayList<Employee>) employees.clone();
+		events = new ArrayList<Event>();
+		for (int i = 0; i < totalVenueSize.size() && usedEmployees.size() > 0; i++) {
+			int index = randomizer.nextInt(usedEmployees.size());
+			event = new Event(totalVenueSize.get(i), usedEmployees.get(index));
+			events.add(event);
+			usedEmployees.remove(index);
 		}
 
 		return events;

@@ -24,13 +24,22 @@ public class Viewer extends JFrame implements ActionListener{
 	addVenue, removeVenue, updateVenue, searchVenue,
 	saveFile,
 	addBlacklisted, searchBlacklistedEmployee;
+<<<<<<< HEAD
 	
 	JTextField addID, addFName, addLName, addPassword, addPhone, addEmail, addVenAddress, addVenName, addVenTables, addEID, addVID;
+=======
+	JTextField whatToUpdateField; //= new JTextField(25);
+	JTextField updateField;// = new JTextField(25);
+	JTextField updateIDField;// = new JTextField(25);
+	JTextField addID, addFName, addLName, addPassword, addPhone, addEmail, addVenAddress, addVenName, addVenTables;
+>>>>>>> 9ffe4c75f7f26d5bfb69f0e90e343b635940a44c
 	JMenuBar menuBar;
 	JMenu empMenu, venMenu, fileMenu, blackListMenu;
 	DefaultTableModel tableModel;
 	Scheduler generateSchedule = new Scheduler();
 	ArrayList<Event> scheduler;
+	Object[][] data;
+	String 	inputID;
 	
 	
 
@@ -63,13 +72,11 @@ public class Viewer extends JFrame implements ActionListener{
 		} catch (Exception e) {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
-
-		// Table Data
 		
 
 		// Initializes array row length to total employee size from database. Columns set to 
 		Object[] colDays = {"Name","Sunday", "Monday", "Tuesday","Wednesday","Thursday","Friday","Saturday"};
-		Object[][] data = new Object[empList.size()][colDays.length];
+		data = new Object[empList.size()][colDays.length];
 		// Sets data in each of the data Object's cells
 		ArrayList<ArrayList<Event>> schedulerList = new ArrayList<ArrayList<Event>>();
 		for(int i = 0; i < colDays.length; i++){
@@ -88,16 +95,12 @@ public class Viewer extends JFrame implements ActionListener{
 						}
 					}
 					if(venue!= null){
-						data[i][fillDays] = venue.getName();
+						data[i][fillDays] = venue.getID();
 					}
 				}
 				data[i][0] = empList.get(i);		
 		}
-//		for(int i = 1; i < scheduler.size(); i++){
-//			for(int j = 0; j < colDays.length; j++){
-//				data[i][j] = scheduler.get(i).getVenue();
-//			}
-//		}
+		
 		
 		table = new JTable(data, colDays);
 
@@ -119,6 +122,7 @@ public class Viewer extends JFrame implements ActionListener{
 
 
 		// SET CUSTOM EDITOR TO TEAMS COLUMN
+		
 		table.getColumnModel().getColumn(0).setCellEditor(
 				new ButtonEditor(new JTextField()));
 
@@ -218,24 +222,23 @@ public class Viewer extends JFrame implements ActionListener{
 	 */
 	@Override 
 	public void actionPerformed(ActionEvent menuItem){
-		String 	inputID;
 		Venue venue = null;
 		Employee employee = null;
-		
+
+
 		
 
 
 
 		// Actions for File Menu Items
 
-//		if(menuItem.getSource().equals(saveFile)){
-//			saveLocation = new String("");
-//			SaveSchedule(table,);
-//		}
-//		if(menuItem.getSource().equals(saveFile)){
-//			saveLocation = new String("")
-//			SaveSchedule(table,);
-//		}
+		if(menuItem.getSource().equals(saveFile)){
+			String fileName = JOptionPane.showInputDialog("File name:");
+			ExcelExporter ee = new ExcelExporter(fileName);
+			ee.addSheet("Schedule", ExcelExporter.scheduleHeaders, data);
+			ee.finish();
+		}
+
 
 		// Actions for Employee Menu Items
 		if(menuItem.getSource().equals(searchEmployee)){
@@ -290,7 +293,24 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		
 		if(menuItem.getSource().equals(updateEmployee)){
-			System.out.println("Update Employee");
+			inputID = JOptionPane.showInputDialog("ID for the Employee you would like to update: ");
+
+			
+			try {
+				employee = Database.searchEmployeeID(inputID);
+				addFName = new JTextField(employee.getFirstName());
+				addLName= new JTextField(employee.getLastName());
+				addPhone = new JTextField(employee.getPhone());
+				addEmail = new JTextField(employee.getEmail());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Object[] empInfo = {"First Name: ", addFName, "Last Name: ", addLName, "Choose a Password: ", addPassword, "Phone Number: ", addPhone, "Email: ", addEmail};
+			updateEmployeeInfoBox(empInfo, "Update Employee Information");
+			
+			
 		}
 		
 		
@@ -338,13 +358,29 @@ public class Viewer extends JFrame implements ActionListener{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Removed Venue " + venue);
+			System.out.println("Removed venue " + venue);
 
 		}
 		
 		
 		if(menuItem.getSource().equals(updateVenue)){
-			System.out.println("Update Venue");
+			inputID = JOptionPane.showInputDialog("ID for the Venue you would like to update: ");
+
+			
+			try {
+				venue = Database.searchVenueID(inputID);
+				addVenName = new JTextField(venue.getName());
+				addVenTables = new JTextField(venue.getTables());
+				addVenAddress = new JTextField(venue.getAddress());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Object[] venInfo = {"Venue Name: ", addVenName, "Table Amount: ", addVenTables, "Address: ", addVenAddress};
+
+			updateVenueInfoBox(venInfo, "Update Venue Information");
+			
 
 		}
 		
@@ -377,6 +413,19 @@ public class Viewer extends JFrame implements ActionListener{
 		}
 				
 	}
+	public void updateEmployeeInfoBox(Object[] empInfo, String boxTitle){
+		try {
+			JOptionPane.showConfirmDialog(null, empInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
+			Database.removeEmployee(inputID);
+			Database.addEmployee(inputID, addFName.getText(), addLName.getText(), addPassword.getText(), addPhone.getText(),addEmail.getText(),false);
+			System.out.println("Successfully updated " + addFName.getText() + " " + addLName.getText() + " in the Employee roster!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Error with updating Employee information. Please try again!");
+		}
+	}
+	
 	public void createVenueInfoBox(Object[] venInfo, String boxTitle){
 		try {
 			JOptionPane.showConfirmDialog(null, venInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
@@ -388,6 +437,7 @@ public class Viewer extends JFrame implements ActionListener{
 			System.out.println("Error with Venue information. Please try again!");
 		}
 	}
+<<<<<<< HEAD
 	public void createBlacklistInfoBox(Object[] blackInfo, String boxTitle){
 		try {
 			JOptionPane.showConfirmDialog(null, blackInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
@@ -399,6 +449,19 @@ public class Viewer extends JFrame implements ActionListener{
 			System.out.println("Error with information. Please try again!");
 		}
 				
+=======
+	public void updateVenueInfoBox(Object[] venInfo, String boxTitle){
+		try {
+			JOptionPane.showConfirmDialog(null, venInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
+			Database.removeVenue(inputID);
+			Database.addVenue(inputID, addVenName.getText(), addVenTables.getText(), addVenAddress.getText());
+			System.out.println("Successfully updated " + addVenName.getText() + " in the Venue roster!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Error with updating Venue information. Please try again!");
+		}
+>>>>>>> 9ffe4c75f7f26d5bfb69f0e90e343b635940a44c
 	}
 	public static void main(String[] args) {
 		Viewer bc = new Viewer();
@@ -479,15 +542,9 @@ class ButtonEditor extends DefaultCellEditor {
 
 		btn.addActionListener(new ActionListener() {
 
+			// Creates a dialog box displaying Employee information
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				empInfoBox = new JDialog();
-//				JScrollPane scrollPane = new JScrollPane(empInfoTable);
-//				scrollPane.setSize(400, 400);
-//				empInfoBox.add(scrollPane);
-//				empInfoBox.setTitle(employee.getFullName());
-//				empInfoBox.pack();
-//				empInfoBox.setVisible(true);
 				JOptionPane.showMessageDialog(null, "ID: " + employee.getId().toUpperCase() + "\n" +
 						"Name: " + employee.getFullName() + "\n" +
 						"Phone: " + employee.getPhone() + "\n" +

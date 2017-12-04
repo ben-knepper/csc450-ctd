@@ -20,7 +20,13 @@ public class Venue {
 	}
 	
 	public void setID(String iD) {
-		ID = iD;
+		try {
+			Database.updateVenue("venueID", iD, this.ID);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.ID = iD;
 	}
 	
 	public String getName() {
@@ -28,6 +34,12 @@ public class Venue {
 	}
 	
 	public void setName(String name) {
+		try {
+			Database.updateVenue("name", name, this.name);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.name = name;
 	}
 	
@@ -36,6 +48,12 @@ public class Venue {
 	}
 	
 	public void setTables(int tables) {
+		try {
+			Database.updateVenue("tableNum", String.valueOf(tables), String.valueOf(this.tables));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.tables = tables;
 	}
 	
@@ -44,6 +62,12 @@ public class Venue {
 	}
 	
 	public void setAddress(String address) {
+		try {
+			Database.updateVenue("address", address, this.address);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.address = address;
 	}
 	
