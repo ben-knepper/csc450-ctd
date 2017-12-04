@@ -2,7 +2,9 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -95,8 +97,42 @@ public class Viewer extends JFrame implements ActionListener{
 				data[i][0] = empList.get(i);		
 		}
 		
-		
-		table = new JTable(data, colDays);
+		// create new table with an overriden tooltip
+		HashMap<String, Venue> venueDict = new HashMap<String, Venue>();
+		try {
+			for (Venue venue : Database.getVenues())
+			{
+				venueDict.put(venue.getID(), venue);
+			}
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		table = new JTable(data, colDays){
+
+            //Implement table cell tool tips.           
+            public String getToolTipText(MouseEvent e) {
+                java.awt.Point p = e.getPoint();
+                String tip = null;
+                int row = rowAtPoint(p);
+                int column = columnAtPoint(p);
+
+                try {
+                    //comment row, exclude heading
+                    if(row > 0 && column > 0){
+                      String venueId = data[row][column].toString();
+                      Venue venue = venueDict.get(venueId);
+                      tip = "<html>" + venue.getName()
+                    		  + "<br>Tables: " + venue.getTables()
+                    		  + "</html>";
+                    }
+                } catch (RuntimeException e1) {
+                    //catch null pointer exception if mouse is over an empty line
+                }
+
+                return tip;
+            }
+        };
 
 		// Table resizing
 		table.setAutoResizeMode(table.AUTO_RESIZE_OFF);

@@ -9,12 +9,19 @@ public class Scheduler {
 
 	Event event;
 
-	Random randomizer;
+	Random randomizer = new Random();
 
 	public Scheduler() {
 		try {
 			employees = Database.getEmployees();
 			venues = Database.getVenues();
+			
+			for (Venue venue : venues) {
+				int tables = venue.getTables();
+				for (int i = 0; i < tables; i++) {
+					totalVenueSize.add(venue);
+				}
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -26,16 +33,9 @@ public class Scheduler {
 		 * Generates one day's worth of scheduling, adding employees to all
 		 * events.
 		 */
-		randomizer = new Random();
 
 		// Creates a list of venues based on the total number of tables
 		// across all venues.
-		for (Venue venue : venues) {
-			int tables = venue.getTables();
-			for (int i = 0; i < tables; i++) {
-				totalVenueSize.add(venue);
-			}
-		}
 		ArrayList<Employee> usedEmployees = (ArrayList<Employee>) employees.clone();
 		events = new ArrayList<Event>();
 		for (int i = 0; i < totalVenueSize.size() && usedEmployees.size() > 0; i++) {
