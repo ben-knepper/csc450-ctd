@@ -34,6 +34,7 @@ public class Viewer extends JFrame implements ActionListener{
 	Scheduler generateSchedule = new Scheduler();
 	ArrayList<Event> scheduler;
 	Object[][] data;
+	String 	inputID;
 	
 	
 
@@ -216,7 +217,6 @@ public class Viewer extends JFrame implements ActionListener{
 	 */
 	@Override 
 	public void actionPerformed(ActionEvent menuItem){
-		String 	inputID;
 		Venue venue = null;
 		Employee employee = null;
 
@@ -285,7 +285,24 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		
 		if(menuItem.getSource().equals(updateEmployee)){
-			System.out.println("Update Employee");
+			inputID = JOptionPane.showInputDialog("ID for the Employee you would like to update: ");
+
+			
+			try {
+				employee = Database.searchEmployeeID(inputID);
+				addFName = new JTextField(employee.getFirstName());
+				addLName= new JTextField(employee.getLastName());
+				addPhone = new JTextField(employee.getPhone());
+				addEmail = new JTextField(employee.getEmail());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Object[] empInfo = {"First Name: ", addFName, "Last Name: ", addLName, "Choose a Password: ", addPassword, "Phone Number: ", addPhone, "Email: ", addEmail};
+			updateEmployeeInfoBox(empInfo, "Update Employee Information");
+			
+			
 		}
 		
 		
@@ -339,20 +356,23 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		
 		if(menuItem.getSource().equals(updateVenue)){
-			updateField = new JTextField(25);
-			addID = new JTextField(10);
-			addVenName = new JTextField(15);
-			addVenTables = new JTextField(15);
-			addVenAddress = new JTextField(25);
+			inputID = JOptionPane.showInputDialog("ID for the Venue you would like to update: ");
+
 			
-			JOptionPane.showInputDialog("ID for the Venue you would like to update: ", updateField);
-			Object[] venInfo = {"Venue ID: ", addID, "Venue Name: ", addVenName, "Table Amount: ", addVenTables, "Address: ", addVenAddress};
+			try {
+				venue = Database.searchVenueID(inputID);
+				addVenName = new JTextField(venue.getName());
+				addVenTables = new JTextField(venue.getTables());
+				addVenAddress = new JTextField(venue.getAddress());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Object[] venInfo = {"Venue Name: ", addVenName, "Table Amount: ", addVenTables, "Address: ", addVenAddress};
 
 			updateVenueInfoBox(venInfo, "Update Venue Information");
 			
-			
-			//Database.updateVenue(column, value, ID);
-			System.out.println("Update Venue");
 
 		}
 		
@@ -382,6 +402,19 @@ public class Viewer extends JFrame implements ActionListener{
 		}
 				
 	}
+	public void updateEmployeeInfoBox(Object[] empInfo, String boxTitle){
+		try {
+			JOptionPane.showConfirmDialog(null, empInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
+			Database.removeEmployee(inputID);
+			Database.addEmployee(inputID, addFName.getText(), addLName.getText(), addPassword.getText(), addPhone.getText(),addEmail.getText(),false);
+			System.out.println("Successfully updated " + addFName.getText() + " " + addLName.getText() + " in the Employee roster!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Error with updating Employee information. Please try again!");
+		}
+	}
+	
 	public void createVenueInfoBox(Object[] venInfo, String boxTitle){
 		try {
 			JOptionPane.showConfirmDialog(null, venInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
@@ -396,7 +429,8 @@ public class Viewer extends JFrame implements ActionListener{
 	public void updateVenueInfoBox(Object[] venInfo, String boxTitle){
 		try {
 			JOptionPane.showConfirmDialog(null, venInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
-			Database.addVenue(addID.getText(), addVenName.getText(), addVenTables.getText(), addVenAddress.getText());
+			Database.removeVenue(inputID);
+			Database.addVenue(inputID, addVenName.getText(), addVenTables.getText(), addVenAddress.getText());
 			System.out.println("Successfully updated " + addVenName.getText() + " in the Venue roster!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
