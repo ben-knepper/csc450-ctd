@@ -1,9 +1,21 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * 
+ * Scheduler class that copies current employee list, tallies up total tables
+ * across all venues, then iterates through each table, assigning a randomly
+ * chosen employee and that venue table as an Event. All events are placed into
+ * an Event array list, which is then loaded into the object array in Viewer.
+ * Employees in the cloned array list are deleted as they are used to prevent
+ * employees being scheduled twice on the same day (If they can be two places at
+ * once, please tell me, I could use that power.)
+ *
+ */
 public class Scheduler {
-	/** The scheduler adds objects to every event in a cycle (currently one day.)
-	*/
+	/**
+	 * The scheduler adds objects to every event in a cycle (currently one day.)
+	 */
 	private static ArrayList<Event> events; // actual events
 	private static ArrayList<Employee> employees = new ArrayList<Employee>();
 	private static ArrayList<Venue> venues = new ArrayList<Venue>();
@@ -14,12 +26,14 @@ public class Scheduler {
 	Random randomizer = new Random();
 
 	public Scheduler() {
-		/** Constructor. Has most current values for employees, venues, and table amount.
-		*/
+		/**
+		 * Constructor. Has most current values for employees, venues, and table
+		 * amount.
+		 */
 		try {
 			employees = Database.getEmployees();
 			venues = Database.getVenues();
-			
+
 			for (Venue venue : venues) {
 				int tables = venue.getTables();
 				for (int i = 0; i < tables; i++) {
