@@ -96,9 +96,10 @@ public class Viewer extends JFrame implements ActionListener{
 							venue = event.getVenue();
 						}
 					}
-					if(venue!= null){
+					if(venue!= null)
 						data[i][fillDays] = venue.getID();
-					}
+					else
+						data[i][fillDays] = "";
 				}
 				data[i][0] = empList.get(i);		
 		}
