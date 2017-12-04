@@ -25,6 +25,48 @@ public class Main {
 		viewer.setVisible(true);
 		
 	}
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 //	public boolean scheduleCompatible(Dictionary<TimeSlot, String> empTimes, TimeSlot[] eventTimes){
 //		/** Given the times of an event and an employee, tests to see if they are compatible.
 //		* @param empTimes Dictionary containing employee times.
@@ -240,4 +282,3 @@ public class Main {
 //		}
 //		return "request approved";
 //	}
-}
