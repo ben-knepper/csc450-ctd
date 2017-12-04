@@ -25,7 +25,7 @@ public class Viewer extends JFrame implements ActionListener{
 	saveFile,
 	addBlacklisted, searchBlacklistedEmployee;
 	
-	JTextField addID, addFName, addLName, addPassword, addPhone, addEmail, addVenAddress, addVenName, addVenTables;
+	JTextField addID, addFName, addLName, addPassword, addPhone, addEmail, addVenAddress, addVenName, addVenTables, addEID, addVID;
 	JMenuBar menuBar;
 	JMenu empMenu, venMenu, fileMenu, blackListMenu;
 	DefaultTableModel tableModel;
@@ -36,7 +36,7 @@ public class Viewer extends JFrame implements ActionListener{
 
 	
 	
-	Object[] empInfo, venInfo;
+	Object[] empInfo, venInfo, blackInfo;
 	
 	static JTable table;
 
@@ -351,8 +351,11 @@ public class Viewer extends JFrame implements ActionListener{
 		
 		// Actions for Blacklisting Employees
 		if(menuItem.getSource().equals(addBlacklisted)){
-			System.out.println("Add Blacklist");
-
+			addEID = new JTextField(10);
+			addVID = new JTextField(10);
+			
+			Object[] blackInfo = {"Employee ID: ", addEID, "Venue ID: ", addVID};
+			createBlacklistInfoBox(blackInfo, "Add a New Blacklist");
 		}
 		
 		
@@ -384,6 +387,18 @@ public class Viewer extends JFrame implements ActionListener{
 			e.printStackTrace();
 			System.out.println("Error with Venue information. Please try again!");
 		}
+	}
+	public void createBlacklistInfoBox(Object[] blackInfo, String boxTitle){
+		try {
+			JOptionPane.showConfirmDialog(null, blackInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
+			Database.addBlacklisted(addEID.getText(), addVID.getText());
+			System.out.println("Successfully added " + addEID.getText() + " to the " + addVID.getText() + " blacklist!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Error with information. Please try again!");
+		}
+				
 	}
 	public static void main(String[] args) {
 		Viewer bc = new Viewer();
