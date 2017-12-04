@@ -3,7 +3,6 @@ delete from employee;
 delete from venue;
 
 /*Insert data into employee table*/
-insert into employee values("00000", "Vakant", "", "", "", "", "0");
 insert into employee values("13881", "Malin", "Kraft", "password01", "pho-num-0001", "email01@domain.com", "0");
 insert into employee values("17000", "Christian", "Thorstensson", "password02", "pho-num-0002", "email02@domain.com", "0");
 insert into employee values("17005", "Marcus", "Eriksson", "password03", "pho-num-0003", "email03@doamin.com", "0");

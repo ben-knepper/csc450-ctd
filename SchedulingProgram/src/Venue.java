@@ -5,7 +5,6 @@ public class Venue {
 	private String name;
 	private int tables;
 	private String address;
-	private Dictionary<TimeSlot, String> times;
 
 	public Venue(String id, String n, int t, String a) {
 		//constructor
@@ -74,12 +73,4 @@ public class Venue {
 	public String toString() {
 		return this.name;
 	}
-	
-	public Dictionary<TimeSlot, String> getTimes() {
-		return times;
-	}
-	
-	public void setTimes(Dictionary<TimeSlot, String> times) {
-		this.times = times;
-	}	
 }

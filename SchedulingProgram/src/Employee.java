@@ -10,7 +10,6 @@ public class Employee {
 	private String phone;
 	private String email;
 	private boolean manager;
-	private Dictionary<TimeSlot, String> times;
 /**
  * 
  * @param i Use ID
@@ -29,17 +28,6 @@ public class Employee {
 			phone = p;
 			manager = false;
 			email = e;
-			times = buildTimeSlots();
-	}
-	
-	public Dictionary<TimeSlot, String> buildTimeSlots() {
-		//creates a dictionary of time slots, each of which contains a "yes" or "no" value.
-		times = new Hashtable<TimeSlot, String>();
-		for (int h = 0; h < 168; h++)
-		{
-			times.put(new TimeSlot(h), "n");
-		}
-		return times;
 	}
 	
 	public String getEmail() {
@@ -99,31 +87,6 @@ public class Employee {
 	
 	public void setPassword(String pw) {
 		this.password = pw;
-	}
-	
-	public void addTimes(TimeSlot t) {
-		//Sets an existing time slot to "yes".
-		int iden = t.getId();
-	
-		times.put(new TimeSlot(iden), "y");
-	}
-	
-	public void removeTimes(TimeSlot t) {
-		//Sets an existing time slot to "no".
-		int iden = t.getId();
-	
-		times.put(new TimeSlot(iden), "n");
-	}
-	
-	public void blockTimes(TimeSlot t) {
-		//Sets an existing time slot to "blocked" - it will be considered as a "no" temporarily.
-		int iden = t.getId();
-	
-		times.put(new TimeSlot(iden), "b");
-	}
-	
-	public Dictionary<TimeSlot, String> getTimes() {
-		return times;
 	}
 	
 	public String toString() {
