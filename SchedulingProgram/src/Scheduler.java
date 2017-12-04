@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Scheduler {
+	/** The scheduler adds objects to every event in a cycle (currently one day.)
+	*/
 	private static ArrayList<Event> events; // actual events
 	private static ArrayList<Employee> employees = new ArrayList<Employee>();
 	private static ArrayList<Venue> venues = new ArrayList<Venue>();
@@ -12,6 +14,8 @@ public class Scheduler {
 	Random randomizer = new Random();
 
 	public Scheduler() {
+		/** Constructor. Has most current values for employees, venues, and table amount.
+		*/
 		try {
 			employees = Database.getEmployees();
 			venues = Database.getVenues();
