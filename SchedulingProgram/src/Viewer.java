@@ -24,15 +24,11 @@ public class Viewer extends JFrame implements ActionListener{
 	addVenue, removeVenue, updateVenue, searchVenue,
 	saveFile,
 	addBlacklisted, searchBlacklistedEmployee;
-<<<<<<< HEAD
-	
-	JTextField addID, addFName, addLName, addPassword, addPhone, addEmail, addVenAddress, addVenName, addVenTables, addEID, addVID;
-=======
+
 	JTextField whatToUpdateField; //= new JTextField(25);
 	JTextField updateField;// = new JTextField(25);
 	JTextField updateIDField;// = new JTextField(25);
-	JTextField addID, addFName, addLName, addPassword, addPhone, addEmail, addVenAddress, addVenName, addVenTables;
->>>>>>> 9ffe4c75f7f26d5bfb69f0e90e343b635940a44c
+	JTextField addID, addFName, addLName, addPassword, addPhone, addEmail, addVenAddress, addVenName, addVenTables, addEID, addVID;
 	JMenuBar menuBar;
 	JMenu empMenu, venMenu, fileMenu, blackListMenu;
 	DefaultTableModel tableModel;
@@ -437,7 +433,7 @@ public class Viewer extends JFrame implements ActionListener{
 			System.out.println("Error with Venue information. Please try again!");
 		}
 	}
-<<<<<<< HEAD
+
 	public void createBlacklistInfoBox(Object[] blackInfo, String boxTitle){
 		try {
 			JOptionPane.showConfirmDialog(null, blackInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
@@ -448,8 +444,8 @@ public class Viewer extends JFrame implements ActionListener{
 			e.printStackTrace();
 			System.out.println("Error with information. Please try again!");
 		}
-				
-=======
+	}
+		
 	public void updateVenueInfoBox(Object[] venInfo, String boxTitle){
 		try {
 			JOptionPane.showConfirmDialog(null, venInfo, boxTitle, JOptionPane.OK_CANCEL_OPTION);
@@ -461,7 +457,6 @@ public class Viewer extends JFrame implements ActionListener{
 			e.printStackTrace();
 			System.out.println("Error with updating Venue information. Please try again!");
 		}
->>>>>>> 9ffe4c75f7f26d5bfb69f0e90e343b635940a44c
 	}
 	public static void main(String[] args) {
 		Viewer bc = new Viewer();
